@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Executive dashboard for commercial brand alliances and campus partnerships, September 2026.">
+  <title>Brand Alliances & Partnerships — Executive Dashboard</title>
+  <style>
+    :root {
+      --ink-950:#08142f;--ink-900:#0d1d3f;--ink-800:#17305f;--ink-700:#26477d;
+      --blue-600:#1768d2;--blue-500:#2f7ee6;--blue-100:#eaf3ff;
+      --teal-600:#087f72;--teal-100:#e3f7f3;--amber-600:#a85e00;--amber-100:#fff2d8;
+      --red-600:#b42332;--red-100:#ffeaec;--green-600:#18794e;--green-100:#e8f6ee;
+      --slate-700:#34445f;--slate-600:#52627b;--slate-500:#6f7d93;--slate-300:#cfd7e4;
+      --slate-200:#e4e9f1;--slate-100:#f1f4f8;--slate-50:#f7f9fc;--white:#fff;
+      --shadow-sm:0 1px 2px rgba(13,29,63,.06),0 1px 6px rgba(13,29,63,.04);
+      --shadow-md:0 14px 36px rgba(13,29,63,.10);--radius-sm:10px;--radius:16px;--radius-lg:22px;
+      --max:1480px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--slate-50);color:var(--ink-950);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+    button,input,select{font:inherit}
+    button{touch-action:manipulation}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid rgba(47,126,230,.35);outline-offset:2px}
+    .skip{position:fixed;top:8px;left:8px;z-index:1000;transform:translateY(-150%);background:#fff;color:var(--ink-950);padding:10px 14px;border-radius:8px;box-shadow:var(--shadow-md)}
+    .skip:focus{transform:none}
+    .topbar{background:linear-gradient(112deg,var(--ink-950),var(--ink-900) 58%,#153d73);color:#fff;position:relative;overflow:hidden}
+    .topbar:after{content:"";position:absolute;right:-120px;top:-220px;width:520px;height:520px;border-radius:50%;border:80px solid rgba(47,126,230,.11);pointer-events:none}
+    .topbar-inner{position:relative;z-index:1;max-width:var(--max);margin:auto;padding:30px 28px 26px}
+    .eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9bc5ff;margin-bottom:8px}
+    .title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:28px}
+    h1{font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.08;letter-spacing:-.035em;margin:0;font-weight:740;max-width:840px}
+    .subtitle{max-width:790px;color:#becce2;margin:12px 0 0;font-size:.98rem}
+    .header-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .period,.source-pill{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:9px 13px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.07);font-size:.82rem;font-weight:700;white-space:nowrap}
+    .dot{width:8px;height:8px;border-radius:50%;background:#5ce1c3;box-shadow:0 0 0 4px rgba(92,225,195,.12)}
+    .print-btn{border:1px solid rgba(255,255,255,.24);border-radius:999px;background:#fff;color:var(--ink-950);min-height:40px;padding:8px 14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.18s ease}
+    .print-btn:hover{background:#eef5ff;transform:translateY(-1px)}
+    .container{max-width:var(--max);margin:auto;padding:22px 28px 48px}
+    .readout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.5fr);gap:16px;margin-top:-1px;margin-bottom:18px}
+    .readout-main{background:linear-gradient(118deg,#eef5ff,#fff 68%);border:1px solid #d8e6fa;border-radius:var(--radius);padding:18px 20px;display:flex;gap:16px;align-items:flex-start}
+    .readout-icon{flex:0 0 42px;height:42px;border-radius:12px;background:var(--ink-900);display:grid;place-items:center;color:#fff}
+    .readout h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.095em;margin:0 0 5px;color:var(--blue-600)}
+    .readout p{margin:0;font-size:1rem;color:var(--slate-700)}
+    .readout strong{color:var(--ink-950)}
+    .data-note{border:1px solid #edd7a4;background:#fffaf0;border-radius:var(--radius);padding:16px 18px;color:#684512}
+    .data-note b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;color:#8a5200}
+    .data-note span{font-size:.86rem;line-height:1.4;display:block}
+    .kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
+    .kpi{position:relative;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:17px 17px 15px;box-shadow:var(--shadow-sm);min-height:130px;overflow:hidden;text-align:left;color:inherit;width:100%;cursor:pointer;transition:border-color .16s ease,box-shadow .16s ease,background .16s ease}
+    .kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--kpi-color,var(--blue-600))}
+    .kpi:hover{border-color:#b7cae5;box-shadow:0 10px 24px rgba(13,29,63,.11);background:#fcfdff}
+    .kpi:active{background:#f2f7fd}
+    .kpi-label{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.075em;color:var(--slate-600);font-weight:800}
+    .kpi-value{display:block;font-size:2.15rem;line-height:1.1;letter-spacing:-.045em;margin:9px 0 6px;font-weight:760;font-variant-numeric:tabular-nums}
+    .kpi-note{display:block;font-size:.82rem;color:var(--slate-600)}
+    .kpi-note strong{color:var(--ink-900)}
+    .kpi-action{display:inline-flex;align-items:center;gap:5px;margin-top:7px;color:var(--blue-600);font-size:.7rem;font-weight:850}
+    .portfolio-band{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr);gap:14px;margin-bottom:14px}
+    .compare-list{display:grid;gap:18px}
+    .compare-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px;font-size:.82rem}
+    .compare-head strong{color:var(--ink-900)}
+    .compare-head span{color:var(--slate-500);font-variant-numeric:tabular-nums}
+    .stackbar{height:16px;border-radius:999px;overflow:hidden;display:flex;background:var(--slate-100);box-shadow:inset 0 0 0 1px rgba(13,29,63,.06)}
+    .stackbar span{height:100%}.stack-open{background:#d47b00}.stack-closed{background:#1a8f5d}.stack-live{background:#1768d2}
+    .stack-legend{display:flex;gap:13px;flex-wrap:wrap;margin-top:12px;color:var(--slate-600);font-size:.72rem}
+    .stack-legend span{display:inline-flex;align-items:center;gap:6px}.stack-legend i{width:8px;height:8px;border-radius:2px;background:var(--c)}
+    .logo-rail{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}
+    .logo-tile{min-height:78px;border:1px solid var(--slate-200);border-radius:12px;background:linear-gradient(145deg,#fff,#f7f9fc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:9px;text-align:center;color:inherit;font:inherit;width:100%}
+    button.logo-tile{cursor:pointer;transition:border-color .16s ease,box-shadow .16s ease,background .16s ease}
+    button.logo-tile:hover{border-color:#b7cae5;box-shadow:var(--shadow-sm);background:#fff}
+    button.logo-tile:active{background:#eef5ff}
+    .logo-tile img{width:66px;height:28px;object-fit:contain;max-width:100%}
+    .logo-tile b{font-size:.74rem;line-height:1.2;color:var(--slate-600);font-weight:780}
+    .logo-fallback{display:grid;place-items:center;font-size:.72rem;font-weight:900;color:var(--blue-600)}
+    .logo-tile .logo-fallback{width:58px;height:28px;border-radius:8px;background:var(--blue-100)}
+    .more-tile{background:var(--ink-900);color:#fff;border-color:var(--ink-900)}
+    .more-tile strong{font-size:1.25rem;line-height:1}.more-tile b{color:#cbd7e9}
+    .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;margin-bottom:14px}
+    .card{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:19px;min-width:0}
+    .span-8{grid-column:span 8}.span-7{grid-column:span 7}.span-6{grid-column:span 6}.span-5{grid-column:span 5}.span-4{grid-column:span 4}
+    .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:17px}
+    .card h2{font-size:1.03rem;line-height:1.3;margin:0;color:var(--ink-900)}
+    .card .desc{font-size:.8rem;color:var(--slate-500);margin-top:3px}
+    .micro-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-500)}
+    .status-layout{display:grid;grid-template-columns:190px 1fr;gap:20px;align-items:center}
+    .donut{width:170px;height:170px;border-radius:50%;background:conic-gradient(var(--amber-600) 0 78.95%,var(--green-600) 78.95% 100%);position:relative;display:grid;place-items:center;margin:auto}
+    .donut:after{content:"";position:absolute;inset:24px;border-radius:50%;background:#fff}
+    .donut-center{position:relative;z-index:1;text-align:center}
+    .donut-center strong{display:block;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+    .donut-center span{font-size:.73rem;color:var(--slate-500);font-weight:700}
+    .legend{display:grid;gap:12px}
+    .legend-row{display:grid;grid-template-columns:12px 1fr auto;gap:10px;align-items:center;font-size:.88rem}
+    .legend-swatch{width:10px;height:10px;border-radius:3px;background:var(--c)}
+    .legend-row strong{font-variant-numeric:tabular-nums}
+    .progress{grid-column:2 / 4;height:7px;background:var(--slate-100);border-radius:99px;overflow:hidden;margin-top:-6px}
+    .progress>span{display:block;height:100%;background:var(--c);border-radius:99px;width:var(--w)}
+    .decision-list{display:grid;gap:10px}
+    .decision{border:1px solid var(--slate-200);border-radius:13px;padding:13px 14px;display:grid;grid-template-columns:34px 1fr;gap:12px;background:linear-gradient(115deg,#fff,#fafcff)}
+    .decision-num{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--ink-900);color:#fff;font-size:.8rem;font-weight:850}
+    .decision h3{font-size:.89rem;margin:0 0 3px;color:var(--ink-900)}
+    .decision p{font-size:.79rem;line-height:1.4;color:var(--slate-600);margin:0}
+    .decision button{border:0;background:none;color:var(--blue-600);font-weight:800;padding:5px 0 0;cursor:pointer;font-size:.78rem;text-align:left}
+    .bar-chart{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;height:226px;align-items:end;padding:10px 4px 0;border-bottom:1px solid var(--slate-200);position:relative}
+    .bar-chart:before,.bar-chart:after{content:"";position:absolute;left:0;right:0;border-top:1px dashed #dbe2ec;z-index:0}
+    .bar-chart:before{top:31%}.bar-chart:after{top:62%}
+    .month-bar{display:flex;flex-direction:column;height:100%;justify-content:flex-end;align-items:center;position:relative;z-index:1;min-width:0}
+    .bar-value{font-size:.78rem;font-weight:850;margin-bottom:5px;font-variant-numeric:tabular-nums;color:var(--ink-900)}
+    .bar{width:min(48px,72%);height:var(--h);min-height:8px;background:linear-gradient(#2f7ee6,#1558ae);border-radius:7px 7px 2px 2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+    .bar.current{background:linear-gradient(#f4a62a,#b96500)}
+    .month{font-size:.72rem;color:var(--slate-600);margin:7px 0 -25px;white-space:nowrap}
+    .chart-foot{display:flex;justify-content:space-between;gap:16px;margin-top:35px;color:var(--slate-500);font-size:.75rem}
+    .chart-foot strong{color:var(--slate-700)}
+    .hbar-list{display:grid;gap:12px}
+    .hbar-head{display:flex;justify-content:space-between;gap:16px;font-size:.8rem;margin-bottom:5px}
+    .hbar-head span:first-child{font-weight:750;color:var(--slate-700)}
+    .hbar-head span:last-child{font-variant-numeric:tabular-nums;color:var(--slate-500)}
+    .hbar-track{height:9px;background:var(--slate-100);border-radius:99px;overflow:hidden}
+    .hbar-fill{height:100%;width:var(--w);background:var(--c,var(--blue-600));border-radius:99px}
+    .age-blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+    .age-block{border-radius:13px;padding:14px;background:var(--slate-50);border:1px solid var(--slate-200)}
+    .age-block strong{font-size:1.65rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+    .age-block span{font-size:.74rem;color:var(--slate-600)}
+    .age-block.risk{background:var(--red-100);border-color:#f7cbd0;color:var(--red-600)}
+    .watchlist{margin-top:13px;padding-top:13px;border-top:1px solid var(--slate-200)}
+    .watchlist-title{font-size:.73rem;text-transform:uppercase;letter-spacing:.075em;font-weight:850;color:var(--red-600);margin-bottom:8px}
+    .watch-chips{display:flex;flex-wrap:wrap;gap:7px}
+    .chip{border:1px solid #f1c0c6;background:#fff7f8;color:#872332;border-radius:999px;padding:6px 9px;font-size:.74rem;font-weight:700}
+    .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:26px 0 12px}
+    .section-title h2{font-size:1.25rem;margin:0;letter-spacing:-.018em;color:var(--ink-900)}
+    .section-title p{font-size:.82rem;color:var(--slate-500);margin:3px 0 0}
+    .result-count{font-size:.8rem;color:var(--slate-600);font-weight:750;white-space:nowrap}
+    .explorer{padding:0;overflow:hidden}
+    .filters{display:grid;grid-template-columns:minmax(220px,1.6fr) repeat(3,minmax(145px,.65fr)) auto;gap:10px;padding:14px;background:#f7f9fc;border-bottom:1px solid var(--slate-200);align-items:end}
+    .field label{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;font-weight:850;color:var(--slate-600);margin:0 0 5px 2px}
+    .field input,.field select{width:100%;min-height:42px;border:1px solid #cbd5e2;background:#fff;border-radius:10px;padding:9px 11px;color:var(--ink-950)}
+    .field input::placeholder{color:#8a97aa}
+    .reset{min-height:42px;border:1px solid #cbd5e2;background:#fff;color:var(--slate-700);border-radius:10px;padding:9px 13px;font-weight:800;cursor:pointer}
+    .reset:hover{background:#eef3f9}
+    .table-wrap{overflow:auto;max-height:560px}
+    table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
+    th{position:sticky;top:0;background:#fff;z-index:2;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.065em;color:var(--slate-500);padding:12px 15px;border-bottom:1px solid var(--slate-200)}
+    td{padding:12px 15px;border-bottom:1px solid #edf0f5;font-size:.82rem;color:var(--slate-700);vertical-align:middle}
+    tbody tr{transition:background .15s ease}
+    tbody tr:hover{background:#f8fbff}
+    .brand-btn{border:0;background:transparent;padding:0;color:var(--ink-900);font-weight:820;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px}
+    .avatar{width:32px;height:32px;border-radius:9px;background:var(--av,#eaf3ff);color:var(--av-text,#1758a6);display:grid;place-items:center;font-size:.68rem;font-weight:900;letter-spacing:.02em;flex:0 0 auto}
+    .status{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border-radius:999px;font-size:.72rem;font-weight:820;white-space:nowrap}
+    .status:before{content:"";width:7px;height:7px;border-radius:50%}
+    .status.open{background:var(--amber-100);color:#805000}.status.open:before{background:#d47b00}
+    .status.closed{background:var(--green-100);color:var(--green-600)}.status.closed:before{background:#1a8f5d}
+    .status.live{background:var(--blue-100);color:#1758a6}.status.live:before{background:#1768d2}
+    .avatar.logo-avatar{position:relative;overflow:hidden;background:#fff;border:1px solid var(--slate-200)}
+    .avatar.logo-avatar img{width:26px;height:26px;object-fit:contain;max-width:100%}
+    .avatar.logo-avatar .logo-fallback{position:absolute;inset:0;background:var(--av);color:var(--av-text)}
+    .age{font-variant-numeric:tabular-nums;font-weight:760}.age.risk{color:var(--red-600)}
+    .row-action{border:1px solid #d4dce8;background:#fff;color:var(--blue-600);border-radius:8px;min-height:32px;padding:5px 9px;font-size:.72rem;font-weight:820;cursor:pointer}
+    .row-action:hover{background:var(--blue-100)}
+    .empty{padding:48px 20px;text-align:center;color:var(--slate-500);display:none}
+    .method{margin-top:14px;padding:14px 16px;border:1px solid var(--slate-200);border-radius:13px;background:#fff;color:var(--slate-600);font-size:.76rem}
+    .method strong{color:var(--ink-900)}
+    .campus-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+    .mini-kpi{background:#fff;border:1px solid var(--slate-200);border-radius:13px;padding:13px 14px;box-shadow:var(--shadow-sm);text-align:left;color:inherit;width:100%}
+    button.mini-kpi{cursor:pointer;transition:border-color .16s ease,box-shadow .16s ease,background .16s ease}
+    button.mini-kpi:hover{border-color:#b7cae5;box-shadow:0 8px 18px rgba(13,29,63,.09)}
+    button.mini-kpi:active{background:#eef5ff}
+    .mini-kpi strong{display:block;font-size:1.45rem;line-height:1.1;color:var(--ink-900);font-variant-numeric:tabular-nums}
+    .mini-kpi span{display:block;margin-top:4px;font-size:.72rem;color:var(--slate-600)}
+    .mini-kpi em{display:block;margin-top:7px;color:var(--blue-600);font-size:.67rem;font-style:normal;font-weight:850}
+    .campus-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .campus-filter{display:flex;gap:7px;flex-wrap:wrap}
+    .filter-pill{border:1px solid var(--slate-200);background:#fff;color:var(--slate-700);border-radius:999px;min-height:38px;padding:7px 12px;font-size:.76rem;font-weight:800;cursor:pointer}
+    .filter-pill[aria-pressed="true"]{background:var(--ink-900);color:#fff;border-color:var(--ink-900)}
+    .campus-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .campus-card{border:1px solid var(--slate-200);background:#fff;border-radius:14px;padding:14px;display:grid;grid-template-columns:48px 1fr;gap:12px;text-align:left;cursor:pointer;min-height:118px;color:inherit;transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease}
+    .campus-card:hover{border-color:#b9cee9;box-shadow:var(--shadow-md);transform:translateY(-2px)}
+    .campus-logo{position:relative;width:48px;height:48px;border:1px solid var(--slate-200);border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden}
+    .campus-logo img{width:39px;height:39px;object-fit:contain;max-width:100%}
+    .campus-logo .logo-fallback{position:absolute;inset:0;background:var(--blue-100)}
+    .campus-name{font-size:.84rem;line-height:1.25;font-weight:830;color:var(--ink-900);margin-bottom:5px}
+    .campus-meta{display:flex;gap:7px;flex-wrap:wrap;color:var(--slate-500);font-size:.69rem;margin-top:7px}
+    .campus-meta span{display:inline-flex;align-items:center;gap:4px}
+    .readiness-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .readiness{border:1px solid var(--slate-200);border-radius:13px;padding:14px;background:var(--slate-50)}
+    .readiness.good{background:#f3fbf7;border-color:#cfeadb}.readiness.gap{background:#fffaf0;border-color:#edd7a4}
+    .readiness .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.065em;font-weight:850;color:var(--slate-600)}
+    .readiness strong{display:block;font-size:1.2rem;margin:6px 0 3px;color:var(--ink-900)}
+    .readiness p{font-size:.74rem;line-height:1.4;color:var(--slate-600);margin:0}
+    .recommendations{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .recommendation{border-left:3px solid var(--blue-600);padding:7px 0 7px 12px}
+    .recommendation b{display:block;font-size:.8rem;color:var(--ink-900);margin-bottom:3px}.recommendation span{font-size:.73rem;color:var(--slate-600)}
+    dialog{border:0;padding:0;border-radius:20px;box-shadow:0 28px 80px rgba(3,12,31,.34);width:min(680px,calc(100vw - 28px));max-height:calc(100vh - 36px);color:var(--ink-950)}
+    dialog::backdrop{background:rgba(5,15,38,.66);backdrop-filter:blur(3px)}
+    .modal-head{background:linear-gradient(115deg,var(--ink-950),#163b70);padding:22px;color:#fff;display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center}
+    .modal-avatar{position:relative;width:52px;height:52px;border-radius:14px;background:#fff;color:var(--ink-900);display:grid;place-items:center;font-weight:900;overflow:hidden}
+    .modal-avatar img{width:44px;height:44px;object-fit:contain;max-width:100%}
+    .modal-avatar .logo-fallback{position:absolute;inset:0;background:#fff}
+    .modal-head h2{font-size:1.28rem;margin:0;letter-spacing:-.02em}.modal-head p{margin:3px 0 0;color:#c7d3e7;font-size:.82rem}
+    .close{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:1.35rem;line-height:1}
+    .modal-body{padding:20px;overflow:auto;max-height:calc(100vh - 150px)}
+    .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .detail{border:1px solid var(--slate-200);border-radius:12px;padding:12px;background:var(--slate-50)}
+    .detail span{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.065em;color:var(--slate-500);font-weight:850;margin-bottom:3px}
+    .detail strong{font-size:.86rem;color:var(--ink-900)}
+    .leadership-call{margin-top:14px;border-radius:13px;padding:14px 15px;background:var(--blue-100);color:#174778;font-size:.84rem}
+    .leadership-call.risk{background:var(--red-100);color:#7d2733}
+    .leadership-call b{display:block;margin-bottom:3px;color:inherit}
+    .modal-actions{display:flex;justify-content:flex-end;margin-top:16px}
+    .modal-actions button{border:0;border-radius:10px;background:var(--ink-900);color:#fff;min-height:42px;padding:9px 16px;font-weight:800;cursor:pointer}
+    .drilldown-dialog{width:min(1120px,calc(100vw - 28px))}
+    .drilldown-head{background:linear-gradient(115deg,var(--ink-950),#163b70);padding:20px 22px;color:#fff;display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+    .drilldown-head h2{font-size:1.3rem;line-height:1.2;margin:0;letter-spacing:-.02em}.drilldown-head p{margin:5px 0 0;color:#c7d3e7;font-size:.82rem}
+    .drilldown-body{padding:18px 20px 20px}
+    .drilldown-summary{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:12px;color:var(--slate-600);font-size:.78rem}
+    .drilldown-summary strong{color:var(--ink-900);font-size:.92rem;font-variant-numeric:tabular-nums}
+    .drilldown-table-wrap{max-height:min(58vh,560px);overflow:auto;border:1px solid var(--slate-200);border-radius:13px}
+    .drilldown-table{min-width:820px}.drilldown-table th{top:0;background:#f7f9fc}.drilldown-table td{padding-top:10px;padding-bottom:10px}
+    .record-name{display:flex;align-items:center;gap:9px;color:var(--ink-900);font-weight:800}.record-name .avatar{background:#fff;border:1px solid var(--slate-200)}
+    .channel{display:inline-flex;padding:4px 8px;border-radius:7px;background:var(--blue-100);color:#1758a6;font-size:.68rem;font-weight:850}.channel.campus{background:#f1eafe;color:#62409a}
+    @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.span-8,.span-7{grid-column:span 12}.span-5,.span-4{grid-column:span 6}.filters{grid-template-columns:1.5fr repeat(2,1fr)}.reset{align-self:end}.portfolio-band{grid-template-columns:1fr}.campus-grid{grid-template-columns:repeat(3,1fr)}.readiness-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.topbar-inner,.container{padding-left:16px;padding-right:16px}.topbar-inner{padding-top:22px}.title-row{align-items:flex-start;flex-direction:column;gap:16px}.header-actions{justify-content:flex-start}.readout{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.kpi:last-child{grid-column:span 2}.span-6,.span-5,.span-4{grid-column:span 12}.status-layout{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.filters .field:first-child{grid-column:span 2}.detail-grid{grid-template-columns:1fr 1fr}.chart-foot{flex-direction:column;gap:4px}.readout-main{align-items:flex-start}.logo-rail{grid-template-columns:repeat(4,1fr)}.campus-summary{grid-template-columns:repeat(3,1fr)}.campus-grid{grid-template-columns:repeat(2,1fr)}.recommendations{grid-template-columns:1fr}}
+    @media(max-width:430px){.kpi-grid{grid-template-columns:1fr}.kpi:last-child{grid-column:auto}.header-actions{display:grid;grid-template-columns:1fr}.period,.source-pill,.print-btn{justify-content:center}.age-blocks{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.filters .field:first-child{grid-column:auto}.detail-grid{grid-template-columns:1fr}.bar-chart{gap:5px}.month{font-size:.64rem}.readout-icon{display:none}.logo-rail{grid-template-columns:repeat(3,1fr)}.campus-summary{grid-template-columns:repeat(2,1fr)}.campus-grid{grid-template-columns:1fr}.readiness-grid{grid-template-columns:1fr}.campus-toolbar{align-items:flex-start;flex-direction:column}.drilldown-body{padding:14px}.drilldown-head{padding:18px}.drilldown-summary{align-items:flex-start;flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+    @media print{body{background:#fff}.topbar{background:var(--ink-950)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-btn,.filters,.row-action,.method{display:none!important}.container{max-width:none;padding:16px}.card,.kpi{break-inside:avoid;box-shadow:none}.table-wrap{max-height:none;overflow:visible}table{min-width:0;font-size:10px}th,td{padding:7px}.explorer{break-before:page}dialog{display:none}.readout{margin-top:0}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to dashboard</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="eyebrow">Leadership review · Partnerships portfolio</div>
+      <div class="title-row">
+        <div>
+          <h1>Brand Alliances & Partnerships</h1>
+          <p class="subtitle">Executive view of commercial alliances and campus partnerships — pipeline health, progression, concentration and ageing.</p>
+        </div>
+        <div class="header-actions" aria-label="Dashboard context and actions">
+          <span class="period"><span class="dot" aria-hidden="true"></span>September 2026</span>
+          <span class="source-pill">MIS snapshot · 51 records</span>
+          <button class="print-btn" id="printBtn" type="button" aria-label="Print dashboard or save it as PDF">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+            Print / PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="readout" aria-labelledby="readout-title">
+      <div class="readout-main">
+        <div class="readout-icon" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>
+        </div>
+        <div>
+          <h2 id="readout-title">Leadership readout</h2>
+          <p><strong>Across 51 current records, the portfolio has two distinct channels:</strong> 38 commercial brand alliances and 13 campus partnerships. The campus portfolio has progressed further—5 of 13 are marked closed or live—while 30 of 38 commercial alliances remain in progress.</p>
+        </div>
+      </div>
+      <aside class="data-note" aria-label="Data interpretation note">
+        <b>Important interpretation</b>
+        <span>Status definitions differ across worksheets. Commercial and campus figures are presented separately; “closed” is not treated as equivalent to “live”.</span>
+      </aside>
+    </section>
+
+    <section class="kpi-grid" aria-label="Combined September key performance indicators. Select any indicator to see its records.">
+      <button class="kpi" type="button" data-drilldown="all" aria-haspopup="dialog" style="--kpi-color:var(--blue-600)"><span class="kpi-label">Total tracked</span><span class="kpi-value">51</span><span class="kpi-note">Across two partnership channels</span><span class="kpi-action">View 51 records →</span></button>
+      <button class="kpi" type="button" data-drilldown="commercial" aria-haspopup="dialog" style="--kpi-color:var(--teal-600)"><span class="kpi-label">Commercial alliances</span><span class="kpi-value">38</span><span class="kpi-note"><strong>75%</strong> of the combined portfolio</span><span class="kpi-action">View commercial data →</span></button>
+      <button class="kpi" type="button" data-drilldown="campus" aria-haspopup="dialog" style="--kpi-color:#7755b7"><span class="kpi-label">Campus partnerships</span><span class="kpi-value">13</span><span class="kpi-note"><strong>25%</strong> of the combined portfolio</span><span class="kpi-action">View campus data →</span></button>
+      <button class="kpi" type="button" data-drilldown="progress" aria-haspopup="dialog" style="--kpi-color:var(--amber-600)"><span class="kpi-label">In progress</span><span class="kpi-value">38</span><span class="kpi-note">30 commercial + 8 campus</span><span class="kpi-action">View active records →</span></button>
+      <button class="kpi" type="button" data-drilldown="closed-live" aria-haspopup="dialog" style="--kpi-color:var(--green-600)"><span class="kpi-label">Closed / live</span><span class="kpi-value">12<span style="font-size:1rem;color:var(--slate-500)"> + 1</span></span><span class="kpi-note">12 closed; 1 campus partnership live</span><span class="kpi-action">View outcome records →</span></button>
+    </section>
+
+    <section class="portfolio-band" aria-label="Portfolio comparison and selected partner logos">
+      <article class="card">
+        <div class="card-head"><div><h2>Channel progression</h2><div class="desc">Direct status comparison · labels remain distinct</div></div><span class="micro-label">51 records</span></div>
+        <div class="compare-list">
+          <div><div class="compare-head"><strong>Commercial brands</strong><span>30 open · 8 closed</span></div><div class="stackbar" role="img" aria-label="Commercial brands: 30 in progress, 8 closed, 0 live"><span class="stack-open" style="width:78.95%"></span><span class="stack-closed" style="width:21.05%"></span></div></div>
+          <div><div class="compare-head"><strong>Campus partnerships</strong><span>8 open · 4 closed · 1 live</span></div><div class="stackbar" role="img" aria-label="Campus partnerships: 8 in progress, 4 closed, 1 live"><span class="stack-open" style="width:61.54%"></span><span class="stack-closed" style="width:30.77%"></span><span class="stack-live" style="width:7.69%"></span></div></div>
+        </div>
+        <div class="stack-legend" aria-label="Status legend"><span><i style="--c:#d47b00"></i>In progress</span><span><i style="--c:#1a8f5d"></i>Closed</span><span><i style="--c:#1768d2"></i>Live</span></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><div><h2>Selected current portfolio</h2><div class="desc">Embedded brand marks · select a logo for partnership details</div></div><span class="micro-label">Brand network</span></div>
+        <div class="logo-rail" id="logoRail" aria-label="Selected partner logos"></div>
+      </article>
+    </section>
+
+    <section class="grid" aria-label="Executive analysis">
+      <article class="card span-7">
+        <div class="card-head"><div><h2>Current pipeline disposition</h2><div class="desc">September status field · snapshot, not cohort conversion</div></div><span class="micro-label">38 total</span></div>
+        <div class="status-layout">
+          <div class="donut" role="img" aria-label="30 partnerships in progress, 8 marked closed"><div class="donut-center"><strong>79%</strong><span>in progress</span></div></div>
+          <div class="legend" aria-label="Status values">
+            <div class="legend-row" style="--c:var(--amber-600)"><span class="legend-swatch" aria-hidden="true"></span><span>In progress</span><strong>30 · 79%</strong><div class="progress" style="--c:var(--amber-600);--w:79%"><span></span></div></div>
+            <div class="legend-row" style="--c:var(--green-600)"><span class="legend-swatch" aria-hidden="true"></span><span>Marked closed</span><strong>8 · 21%</strong><div class="progress" style="--c:var(--green-600);--w:21%"><span></span></div></div>
+            <div class="legend-row" style="--c:var(--slate-300)"><span class="legend-swatch" aria-hidden="true"></span><span>Live status recorded</span><strong>0</strong><div class="progress" style="--c:var(--slate-300);--w:0%"><span></span></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card span-5">
+        <div class="card-head"><div><h2>Decisions for this review</h2><div class="desc">Actions suggested by the current tracker</div></div><span class="micro-label">Priority</span></div>
+        <div class="decision-list">
+          <div class="decision"><div class="decision-num">01</div><div><h3>Resolve the four ageing opportunities</h3><p>Uber, McDonalds, Ospree Duty Free and Haldiram have appeared since April.</p><button type="button" data-filter-age="4+">Open the ageing watchlist →</button></div></div>
+          <div class="decision"><div class="decision-num">02</div><div><h3>Convert campus momentum into outcomes</h3><p>Five of 13 campus records are closed/live, but reach, redemptions and product coverage are not consistently captured.</p><button type="button" id="campusJump">Review campus partnerships →</button></div></div>
+          <div class="decision"><div class="decision-num">03</div><div><h3>Separate closed from activated</h3><p>The commercial tracker records eight closed deals but no live status. Track activation as its own dated milestone.</p></div></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid" aria-label="Portfolio shape and history">
+      <article class="card span-6">
+        <div class="card-head"><div><h2>Monthly tracker volume</h2><div class="desc">Number of merchant records present in each MIS worksheet</div></div><span class="micro-label">Apr–Sep 2026</span></div>
+        <div class="bar-chart" role="img" aria-label="Monthly worksheet record counts: April 20, May 9, June 22, July 25, August 62, September 38">
+          <div class="month-bar"><span class="bar-value">20</span><span class="bar" style="--h:32%"></span><span class="month">Apr</span></div>
+          <div class="month-bar"><span class="bar-value">9</span><span class="bar" style="--h:15%"></span><span class="month">May</span></div>
+          <div class="month-bar"><span class="bar-value">22</span><span class="bar" style="--h:35%"></span><span class="month">Jun</span></div>
+          <div class="month-bar"><span class="bar-value">25</span><span class="bar" style="--h:40%"></span><span class="month">Jul</span></div>
+          <div class="month-bar"><span class="bar-value">62</span><span class="bar" style="--h:100%"></span><span class="month">Aug</span></div>
+          <div class="month-bar"><span class="bar-value">38</span><span class="bar current" style="--h:61%"></span><span class="month">Sep</span></div>
+        </div>
+        <div class="chart-foot"><span><strong>August peak:</strong> 62 records</span><span>Use as reporting volume; monthly sheets are not a cumulative funnel.</span></div>
+      </article>
+
+      <article class="card span-6">
+        <div class="card-head"><div><h2>Open pipeline ageing</h2><div class="desc">30 in-progress records · age from first appearance in the monthly tracker</div></div><span class="micro-label">Intervention view</span></div>
+        <div class="age-blocks">
+          <div class="age-block"><strong>23</strong><span>0–1 month · 77%</span></div>
+          <div class="age-block"><strong>3</strong><span>2–3 months · 10%</span></div>
+          <div class="age-block risk"><strong>4</strong><span>4+ months · 13%</span></div>
+        </div>
+        <div class="watchlist"><div class="watchlist-title">Ageing watchlist · first seen April</div><div class="watch-chips"><span class="chip">Uber</span><span class="chip">McDonalds</span><span class="chip">Ospree Duty Free</span><span class="chip">Haldiram</span></div></div>
+      </article>
+
+      <article class="card span-6">
+        <div class="card-head"><div><h2>Category concentration</h2><div class="desc">Shopping and Services account for 71% of the portfolio</div></div><span class="micro-label">September mix</span></div>
+        <div class="hbar-list">
+          <div><div class="hbar-head"><span>Shopping</span><span>14 · 37%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:100%;--c:#1768d2"></div></div></div>
+          <div><div class="hbar-head"><span>Services</span><span>13 · 34%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:93%;--c:#087f72"></div></div></div>
+          <div><div class="hbar-head"><span>Food & Beverage</span><span>5 · 13%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:36%;--c:#a85e00"></div></div></div>
+          <div><div class="hbar-head"><span>Entertainment</span><span>5 · 13%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:36%;--c:#7755b7"></div></div></div>
+          <div><div class="hbar-head"><span>Automobile</span><span>1 · 3%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:7%;--c:#8a97aa"></div></div></div>
+        </div>
+      </article>
+
+      <article class="card span-6">
+        <div class="card-head"><div><h2>Geographic concentration</h2><div class="desc">Nearly two-thirds of September records are Delhi/NCR-led</div></div><span class="micro-label">Location field</span></div>
+        <div class="hbar-list">
+          <div><div class="hbar-head"><span>Delhi/NCR</span><span>24 · 63%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:100%;--c:#0d1d3f"></div></div></div>
+          <div><div class="hbar-head"><span>Bangalore</span><span>7 · 18%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:29%;--c:#2f7ee6"></div></div></div>
+          <div><div class="hbar-head"><span>Mumbai</span><span>6 · 16%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:25%;--c:#087f72"></div></div></div>
+          <div><div class="hbar-head"><span>Hyderabad</span><span>1 · 3%</span></div><div class="hbar-track"><div class="hbar-fill" style="--w:4%;--c:#a85e00"></div></div></div>
+        </div>
+      </article>
+    </section>
+
+    <section id="campusSection" aria-labelledby="campus-title">
+      <div class="section-title"><div><h2 id="campus-title">Campus partnerships</h2><p>Separate view of the offline campus channel, including progression, ownership and offer readiness.</p></div><div class="result-count" id="campusResultCount" aria-live="polite">13 of 13 campuses</div></div>
+      <div class="campus-summary" aria-label="Campus partnership indicators. Select an indicator to filter the campus portfolio.">
+        <button class="mini-kpi" type="button" data-campus-filter=""><strong>13</strong><span>Campus records</span><em>Show all →</em></button>
+        <button class="mini-kpi" type="button" data-campus-filter="In Progress"><strong>8</strong><span>In progress · 62%</span><em>Show records →</em></button>
+        <button class="mini-kpi" type="button" data-campus-filter="Closed"><strong>4</strong><span>Marked closed · 31%</span><em>Show records →</em></button>
+        <button class="mini-kpi" type="button" data-campus-filter="Live"><strong>1</strong><span>Currently live · 8%</span><em>Show record →</em></button>
+        <button class="mini-kpi" type="button" data-campus-filter=""><strong>100%</strong><span>Offline partnerships</span><em>Show 13 records →</em></button>
+      </div>
+      <div class="card">
+        <div class="campus-toolbar">
+          <div><h2>Campus portfolio</h2><div class="desc">Select a campus for offer, owner and validity details</div></div>
+          <div class="campus-filter" aria-label="Filter campuses by status">
+            <button class="filter-pill" type="button" data-campus-status="" aria-pressed="true">All · 13</button>
+            <button class="filter-pill" type="button" data-campus-status="In Progress" aria-pressed="false">In progress · 8</button>
+            <button class="filter-pill" type="button" data-campus-status="Closed" aria-pressed="false">Closed · 4</button>
+            <button class="filter-pill" type="button" data-campus-status="Live" aria-pressed="false">Live · 1</button>
+          </div>
+        </div>
+        <div class="campus-grid" id="campusGrid"></div>
+        <div class="empty" id="campusEmpty"><strong>No campuses match this status.</strong></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="readiness-title">
+      <div class="section-title"><div><h2 id="readiness-title">MIS readiness & recommended indicators</h2><p>What the current data supports—and what should be added for a forecastable leadership review.</p></div></div>
+      <div class="card">
+        <div class="readiness-grid">
+          <div class="readiness good"><div class="label">Status coverage</div><strong>51 / 51</strong><p>Every current commercial and campus record has a status.</p></div>
+          <div class="readiness good"><div class="label">Owner coverage</div><strong>50 / 51</strong><p>98% have a named owner; Bharat Taxi remains unassigned.</p></div>
+          <div class="readiness gap"><div class="label">Activation milestone</div><strong>Needs field</strong><p>Add target and actual go-live dates after commercial closure.</p></div>
+          <div class="readiness gap"><div class="label">Campus product coverage</div><strong>4 / 13</strong><p>Product is populated for only four campus records; reach and redemptions are not consistently captured.</p></div>
+        </div>
+        <div class="recommendations" aria-label="Recommended next indicators">
+          <div class="recommendation"><b>Forecastability</b><span>Next action, blocker, probability and target closure date.</span></div>
+          <div class="recommendation"><b>Activation velocity</b><span>Days from first contact → close → live, split by channel.</span></div>
+          <div class="recommendation"><b>Partnership impact</b><span>Projected reach, actual reach, redemptions and value generated.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="explorer-title">
+      <div class="section-title"><div><h2 id="explorer-title">Partnership explorer</h2><p>Filter the September portfolio and open any brand for a concise leadership interpretation.</p></div><div class="result-count" id="resultCount" aria-live="polite">38 of 38 records</div></div>
+      <div class="card explorer">
+        <div class="filters" role="search" aria-label="Filter partnerships">
+          <div class="field"><label for="search">Search brand or owner</label><input id="search" type="search" placeholder="e.g. Spotify, Abhinav"></div>
+          <div class="field"><label for="statusFilter">Status</label><select id="statusFilter"><option value="">All statuses</option><option>In Progress</option><option>Closed</option></select></div>
+          <div class="field"><label for="categoryFilter">Category</label><select id="categoryFilter"><option value="">All categories</option><option>Shopping</option><option>Service</option><option>F&B</option><option>Entertainment</option><option>Automobile</option></select></div>
+          <div class="field"><label for="ageFilter">Ageing</label><select id="ageFilter"><option value="">All ages</option><option value="0-1">0–1 month</option><option value="2-3">2–3 months</option><option value="4+">4+ months</option></select></div>
+          <button class="reset" id="resetFilters" type="button">Reset</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Brand</th><th>Status</th><th>Category</th><th>Location</th><th>Owner / POC</th><th>First seen</th><th>Age</th><th><span class="sr-only">Action</span></th></tr></thead>
+            <tbody id="partnershipRows"></tbody>
+          </table>
+          <div class="empty" id="emptyState"><strong>No partnerships match these filters.</strong><br>Reset the filters or broaden your search.</div>
+        </div>
+      </div>
+      <div class="method"><strong>Method:</strong> Commercial status, category, location, mode and owner come from “Sept 26”. First-seen month and ageing are inferred from a brand’s earliest appearance across April–September. Campus metrics come from “College Partnerships”. Older monthly sheets use inconsistent status labels and field placement, so they are used for presence/ageing only. Source: <em>Brand Alliances&amp;Partnerships 2026-2027 (1) (1).xlsx</em>.</div>
+    </section>
+  </main>
+
+  <dialog id="brandDialog" aria-labelledby="dialogTitle">
+    <div class="modal-head">
+      <div class="modal-avatar" id="dialogAvatar" aria-hidden="true"></div>
+      <div><h2 id="dialogTitle"></h2><p id="dialogSubtitle"></p></div>
+      <button class="close" id="dialogClose" type="button" aria-label="Close partnership details">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid" id="dialogDetails"></div>
+      <div class="leadership-call" id="dialogCallout"></div>
+      <div class="modal-actions"><button id="dialogDone" type="button">Done</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="kpiDialog" class="drilldown-dialog" aria-labelledby="kpiDialogTitle">
+    <div class="drilldown-head">
+      <div><h2 id="kpiDialogTitle">Data behind this indicator</h2><p id="kpiDialogSubtitle"></p></div>
+      <button class="close" id="kpiDialogClose" type="button" aria-label="Close indicator records">×</button>
+    </div>
+    <div class="drilldown-body">
+      <div class="drilldown-summary"><span>Every row below comes directly from the September MIS snapshot.</span><strong id="kpiDialogCount"></strong></div>
+      <div class="drilldown-table-wrap">
+        <table class="drilldown-table">
+          <thead><tr><th>Channel</th><th>Partner</th><th>Status</th><th>Location</th><th>Owner / POC</th><th>Portfolio detail</th></tr></thead>
+          <tbody id="kpiDialogRows"></tbody>
+        </table>
+      </div>
+      <div class="modal-actions"><button id="kpiDialogDone" type="button">Done</button></div>
+    </div>
+  </dialog>
+
+  <script>
+    const partnerships=[{"name":"Uber","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Abhinav","detail":"Collaterals is in discussion","firstSeen":"Apr 2026","ageMonths":5},{"name":"GMR","status":"Closed","category":"Shopping","location":"Hyderabad","mode":"Online/Offline","owner":"Srikant","detail":"Closed","firstSeen":"Jun 2026","ageMonths":3},{"name":"McDonalds","status":"In Progress","category":"Shopping","location":"Mumbai","mode":"Online/Offline","owner":"Vikask","detail":"In discussion","firstSeen":"Apr 2026","ageMonths":5},{"name":"Ospree Duty Free","status":"In Progress","category":"Shopping","location":"Mumbai","mode":"Online/Offline","owner":"Meenal","detail":"In discussion","firstSeen":"Apr 2026","ageMonths":5},{"name":"District","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Akansha","detail":"Client will connect on Tuesday","firstSeen":"Jun 2026","ageMonths":3},{"name":"Zomato Gold","status":"In Progress","category":"F&B","location":"Delhi/NCR","mode":"Online","owner":"Aarushi","detail":"In discussion","firstSeen":"Jun 2026","ageMonths":3},{"name":"Harley Davidson","status":"Closed","category":"Automobile","location":"Delhi/NCR","mode":"Online/Offline","owner":"Antriksh","detail":"In discussion","firstSeen":"Jun 2026","ageMonths":3},{"name":"DrinkPrime","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Latika","detail":"In discussion","firstSeen":"Jun 2026","ageMonths":3},{"name":"NPCI","status":"In Progress","category":"Service","location":"Bangalore","mode":"Online","owner":"Pooja","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Slice Bank","status":"In Progress","category":"Service","location":"Bangalore","mode":"Online","owner":"Shivansh","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Soniliv","status":"In Progress","category":"Entertainment","location":"Bangalore","mode":"Online","owner":"Chandan","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Spotify","status":"In Progress","category":"Entertainment","location":"Bangalore","mode":"Online","owner":"Yashodha","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Pluxee","status":"Closed","category":"Service","location":"Bangalore","mode":"Online","owner":"Amrik","detail":"Closed","firstSeen":"Aug 2026","ageMonths":1},{"name":"AARYA Jewellery","status":"Closed","category":"Shopping","location":"Mumbai","mode":"Online","owner":"Vijay","detail":"Closed","firstSeen":"Aug 2026","ageMonths":1},{"name":"Cinepolis","status":"Closed","category":"Entertainment","location":"Mumbai","mode":"Online","owner":"Aadim","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Sangeetha Mobile","status":"In Progress","category":"Shopping","location":"Bangalore","mode":"Online","owner":"Goutam","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Plutos","status":"Closed","category":"Service","location":"Bangalore","mode":"Online","owner":"Ananya","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Radio Mirchi","status":"In Progress","category":"Entertainment","location":"Delhi/NCR","mode":"Online","owner":"Shailav","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"VIVO","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Karun","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Zouk","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Rohit","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Devils Circuit","status":"In Progress","category":"Entertainment","location":"Delhi/NCR","mode":"Online","owner":"Chetan","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"XOXODAY","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Sumit","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Eazydiner","status":"Closed","category":"F&B","location":"Delhi/NCR","mode":"Online","owner":"Mallika","detail":"In discussion","firstSeen":"Apr 2026","ageMonths":5},{"name":"ISIC","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Payal","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Masters’ Union","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Anjali","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Rupay","status":"Closed","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Rupesh","detail":"Closed","firstSeen":"Aug 2026","ageMonths":1},{"name":"Rapido","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Pradip","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"CROMA","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Royston","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Vijay Sales","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Salim","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Pizza Hut","status":"In Progress","category":"F&B","location":"Delhi/NCR","mode":"Online","owner":"Vaibhav","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Haldiram","status":"In Progress","category":"F&B","location":"Delhi/NCR","mode":"Online","owner":"Sapna","detail":"In discussion","firstSeen":"Apr 2026","ageMonths":5},{"name":"KFC","status":"In Progress","category":"F&B","location":"Delhi/NCR","mode":"Online","owner":"Karan","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Bharat Taxi","status":"In Progress","category":"Service","location":"Delhi/NCR","mode":"Online","owner":"Unassigned","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Woodland","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Harkirat","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Decathalon","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Anubha","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Country Delight","status":"In Progress","category":"Shopping","location":"Delhi/NCR","mode":"Online","owner":"Chakradhar","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"Reliance Digital","status":"In Progress","category":"Shopping","location":"Mumbai","mode":"Online","owner":"Chirag","detail":"In discussion","firstSeen":"Aug 2026","ageMonths":1},{"name":"ShoppersStop","status":"In Progress","category":"Shopping","location":"Mumbai","mode":"Online","owner":"Shikha","detail":"In discussion","firstSeen":"Sep 2026","ageMonths":0}];
+    const campuses=[{"name":"Manipal University Jaipur (HYPNEXIS '26)","status":"Closed","location":"Manipal","mode":"Offline","owner":"Zaina","offer":"Up to ₹3,500 off on flights & hotels; no minimum booking","code":"IXIHN","codeType":"Static","product":"Flight","validity":"31 Oct 2026"},{"name":"SSN–SNUC MUN 2026","status":"Closed","location":"Pune","mode":"Offline","owner":"Shreya","offer":"Up to ₹3,500 off on flights & hotels; no minimum booking","code":"IXISSN1","codeType":"Static","product":"Flight","validity":"31 Oct 2026"},{"name":"BITS Pilani Goa","status":"Closed","location":"Goa","mode":"Offline","owner":"Aaditya","offer":"Up to ₹3,500 off on flights & hotels; no minimum booking","code":"IXIBGOA","codeType":"Static","product":"Flight","validity":"30 Sep 2026"},{"name":"Rendezvous (IIT Delhi)","status":"In Progress","location":"New Delhi","mode":"Offline","owner":"Rohit","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"IMT Ghaziabad","status":"Live","location":"Delhi/NCR","mode":"Offline","owner":"Jashman","offer":"Up to ₹3,500 off on flights & hotels; no minimum booking","code":"IXISSN1","codeType":"Static","product":"Flight","validity":"31 Oct 2026"},{"name":"IIT Madras","status":"Closed","location":"Madras","mode":"Offline","owner":"Kanishk","offer":"Up to ₹3,500 off on flights & hotels; no minimum booking","code":"Not recorded","codeType":"Not recorded","product":"Not recorded","validity":"Not recorded"},{"name":"MNIT Bhopal","status":"In Progress","location":"Bhopal","mode":"Offline","owner":"Kanupriya","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"KIET","status":"In Progress","location":"Ghaziabad","mode":"Offline","owner":"Sanchit","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"NIT","status":"In Progress","location":"Nagpur","mode":"Offline","owner":"Prathmesh","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"Nagindas Khandwala College","status":"In Progress","location":"Mumbai","mode":"Offline","owner":"Ved","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"RV University","status":"In Progress","location":"Rajasthan","mode":"Offline","owner":"Nihrarika","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"IIT Kharagpur","status":"In Progress","location":"Kharagpur","mode":"Offline","owner":"Hemang","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"},{"name":"University of Delhi (EEE YANTRIKA)","status":"In Progress","location":"Delhi/NCR","mode":"Offline","owner":"Satyam","offer":"Not yet recorded","code":"Not yet recorded","codeType":"Not yet recorded","product":"Not yet recorded","validity":"Not yet recorded"}];
+    const embeddedBrandLogos={"Uber":"data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VWJlcjwvdGl0bGU+PHBhdGggZD0iTTAgNy45N3Y0Ljk1OGMwIDEuODY3IDEuMzAyIDMuMTAxIDMgMy4xMDEuODI2IDAgMS41NjItLjMxNiAyLjA5NC0uODd2LjczNkg2LjI3VjcuOTdINS4wODJ2NC44ODhjMCAxLjI1Ny0uODUgMi4xMDYtMS45NDcgMi4xMDYtMS4xMSAwLTEuOTQ2LS44MjctMS45NDYtMi4xMDZWNy45NzFIMHptNy40NCAwdjcuOTI1aDEuMTN2LS43MjVjLjUyMS41MzIgMS4yNTcuODYgMi4wNi44NmEzLjAwNiAzLjAwNiAwIDAgMCAzLjAzNC0zLjAxIDMuMDEgMy4wMSAwIDAgMC0zLjAzMy0zLjAyNCAyLjg2IDIuODYgMCAwIDAtMi4wNDkuODYxVjcuOTcxSDcuNDM5em05Ljg2OSAyLjAzOGMtMS42ODcgMC0yLjk2NSAxLjM3LTIuOTY1IDMgMCAxLjcyIDEuMzM0IDMuMDEgMy4wNjYgMy4wMSAxLjA1MyAwIDEuOTEzLS40NjMgMi40OS0xLjIzM2wtLjgyNi0uNjExYy0uNDMuNTc3LS45OTYuODQ3LTEuNjY0Ljg0Ny0uOTczIDAtMS43NTMtLjctMS45MTItMS42NGg0LjY5N3YtLjM3M2MwLTEuNzItMS4yMjItMy0yLjg4Ni0zem02LjI5NS4wNjhjLS42MzQgMC0xLjA5OC4yOTQtMS4zODEuNzU4di0uNzEzaC0xLjEzMXY1Ljc3NGgxLjE0MlYxMi42MWMwLS44OTQuNTQ0LTEuNDcgMS4yOTEtMS40N0gyNHYtMS4wNjVoLS4zOTZ6bS02LjMxOS45MjhjLjg1IDAgMS41NjQuNTg4IDEuNzU2IDEuNDdIMTUuNTJjLjIwMy0uODgyLjkxNi0xLjQ3IDEuNzY1LTEuNDd6bS02LjczMi4wMTJjMS4wODYgMCAxLjk4Ljg4MyAxLjk4IDIuMDA0YTEuOTkzIDEuOTkzIDAgMCAxLTEuOTggMi4wMDFBMS45ODkgMS45ODkgMCAwIDEgOC41NiAxMy4wMmExLjk5IDEuOTkgMCAwIDEgMS45OTItMi4wMDR6Ii8+PC9zdmc+","McDonalds":"data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkJDODE3IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+TWNEb25hbGQnczwvdGl0bGU+PHBhdGggZD0iTTE3LjI0MyAzLjAwNmMyLjA2NiAwIDMuNzQyIDguNzE0IDMuNzQyIDE5LjQ3OEgyNGMwLTExLjU4OC0zLjA0Mi0yMC45NjgtNi43NjYtMjAuOTY4LTIuMTI3IDAtNC4wMDcgMi44MS01LjI0OCA3LjIyNy0xLjI0MS00LjQxNi0zLjEyMS03LjIyNy01LjIzMS03LjIyN0MzLjAzMSAxLjUxNiAwIDEwLjg4OCAwIDIyLjQ3NmgzLjAxNGMwLTEwLjc2MyAxLjY1OC0xOS40NyAzLjcyNC0xOS40NyAyLjA2NiAwIDMuNzQxIDguMDUgMy43NDEgMTcuOThoMi45OTdjMC05LjkzIDEuNjg0LTE3Ljk4IDMuNzUtMTcuOThaIi8+PC9zdmc+","Spotify":"data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMUVENzYwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U3BvdGlmeTwvdGl0bGU+PHBhdGggZD0iTTEyIDBDNS40IDAgMCA1LjQgMCAxMnM1LjQgMTIgMTIgMTIgMTItNS40IDEyLTEyUzE4LjY2IDAgMTIgMHptNS41MjEgMTcuMzRjLS4yNC4zNTktLjY2LjQ4LTEuMDIxLjI0LTIuODItMS43NC02LjM2LTIuMTAxLTEwLjU2MS0xLjE0MS0uNDE4LjEyMi0uNzc5LS4xNzktLjg5OS0uNTM5LS4xMi0uNDIxLjE4LS43OC41NC0uOSA0LjU2LTEuMDIxIDguNTItLjYgMTEuNjQgMS4zMi40Mi4xOC40NzkuNjU5LjMwMSAxLjAyem0xLjQ0LTMuM2MtLjMwMS40Mi0uODQxLjYtMS4yNjIuMy0zLjIzOS0xLjk4LTguMTU5LTIuNTgtMTEuOTM5LTEuMzgtLjQ3OS4xMi0xLjAyLS4xMi0xLjE0LS42LS4xMi0uNDguMTItMS4wMjEuNi0xLjE0MUM5LjYgOS45IDE1IDEwLjU2MSAxOC43MiAxMi44NGMuMzYxLjE4MS41NC43OC4yNDEgMS4yem0uMTItMy4zNkMxNS4yNCA4LjQgOC44MiA4LjE2IDUuMTYgOS4zMDFjLS42LjE3OS0xLjItLjE4MS0xLjM4LS43MjEtLjE4LS42MDEuMTgtMS4yLjcyLTEuMzgxIDQuMjYtMS4yNiAxMS4yOC0xLjAyIDE1LjcyMSAxLjYyMS41MzkuMy43MTkgMS4wMi40MTkgMS41Ni0uMjk5LjQyMS0xLjAyLjU5OS0xLjU1OS4zeiIvPjwvc3ZnPg==","KFC":"data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRjQwMDI3IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+S0ZDPC90aXRsZT48cGF0aCBkPSJNMjEuODkzIDguMjNjLTQuMTg3LjAwMS01LjI0OSAyLjM2NS01LjQyIDMuOTctLjE5NCAxLjgwMiAxLjA1MyAzLjU3IDQuMTI3IDMuNTcgMS4yOTQgMCAyLjE0LS4yMjUgMi40NC0uMzJhLjIxNS4yMTUgMCAwMC4xNDctLjE2NmwuMTczLS45MWEuMTg0LjE4NCAwIDAwLS4yMzYtLjIxYy0uMzM2LjEwNi0uOTMuMjUyLTEuNjg1LjI1Mi0xLjQ2OSAwLTIuNTMtLjg4Mi0yLjM5NS0yLjQuMTMtMS40NyAxLjEyMS0yLjU5IDIuNDg1LTIuNTkuODIgMCAxLjE4My40MyAxLjE1NiAxLjAwM3YuMDMzYS4xODQuMTg0IDAgMDAuMTgyLjE5M2guNTU3Yy4wODYgMCAuMTYtLjA2LjE4LS4xNDNsLjM5LTEuNzZhLjIxNS4yMTUgMCAwMC0uMTUtLjI1NSA3LjIxIDcuMjEgMCAwMC0xLjk1LS4yNjZ6bS0yMC4xNTcuMTE2YS4yLjIgMCAwMC0uMTk1LjE1NmwtLjEwOC40ODRhLjE5OC4xOTggMCAwMC4xMy4yM2wuMDMzLjAxYy4yMDguMDgyLjQ1LjI2Ni4zNDguNzQ4bC0uNzkyIDMuNjJjLS4yMDcuOTg3LS41NDIgMS4xOS0uODYgMS4yMjZoLS4wMWEuMi4yIDAgMDAtLjE3Ni4xNTdsLS4xMDIuNDY0YS4xOTIuMTkyIDAgMDAuMTg3LjIzM2gzLjQ4N2MuMDg1IDAgLjE1OS0uMDYuMTc3LS4xNDJsLjEyLS41NDNhLjE4NC4xODQgMCAwMC0uMTEyLS4yMWwtLjAyMi0uMDFjLS4xNzctLjA3LS40MTgtLjIyNC0uMzU2LS41MWwuNDA1LTEuODVjMS4zODkgMi41MzUgMS44NDggMy4yNjYgMy41MTQgMy4yNjVIOC45MWEuMTgxLjE4MSAwIDAwLjE3Ny0uMTQybC4xMDUtLjQ3YS4xOTUuMTk1IDAgMDAtLjE4Ni0uMjM4Yy0uMzc2LS4wMDYtLjU2LS4wOTMtLjkzNS0uNTc1bC0xLjkzMi0yLjYxNCAyLjUxLTIuMDg4Yy4zMzctLjI2NC43NDgtLjMzOC45NzYtLjM2OGwuMDIyLS4wMDJhLjE4NS4xODUgMCAwMC4xNjMtLjE0NGwuMTAzLS40NjRhLjE4NC4xODQgMCAwMC0uMTgtLjIyM2gtMy4wMmEuMTk5LjE5OSAwIDAwLS4xOTMuMTU1bC0uMTAyLjQ2YS4yLjIgMCAwMC4xMzguMjM1Yy4xNzguMDY5LjIxNy4yNC4wNjMuMzY2TDQuMDQ2IDExLjdsLjQ0LTIuMDE0YS42ODMuNjgzIDAgMDEuNDc3LS40ODdsLjAyNS0uMDA4YS4xOTkuMTk5IDAgMDAuMTM1LS4xNDdsLjEwNi0uNDc3YS4xODEuMTgxIDAgMDAtLjE3Ny0uMjJ6bTguODggMGEuMi4yIDAgMDAtLjE5NC4xNTZsLS4xMDcuNDgzYS4xOS4xOSAwIDAwLjEyMi4yMjFsLjAyLjAwOGMuMjA0LjA3Ny40ODcuMjc0LjM2NC43NThsLTEuMjEgNS40OGEuMTgyLjE4MiAwIDAwLjE3OC4yMjJoMi43NzdjLjA4NiAwIC4xNi0uMDYuMTc5LS4xNDNsLjEyLS41NDdhLjE3NC4xNzQgMCAwMC0uMDk4LS4xOTYgMS41NTggMS41NTggMCAwMS0uMDI3LS4wMTNjLS4xNzYtLjA4Ni0uNDM4LS4yODUtLjM1LS42Ny4wMDktLjA1LjI3LTEuMjQuMjctMS4yNGgyLjM2MmMuMDg2IDAgLjE2LS4wNi4xOC0uMTQzbC4yMjEtMWEuMTgzLjE4MyAwIDAwLS4xOC0uMjI0aC0yLjI4bC40MjctMS45NCAxLjU5Mi0uMDAzYy41MTUgMCAuNjcyLjI3LjY0Mi43MjhsLS4wMDIuMDI0YS4xODQuMTg0IDAgMDAuMTgzLjIwNWguNTg3Yy4wODYgMCAuMTYtLjA2LjE3OC0uMTQ0bC40LTEuOGEuMTg0LjE4NCAwIDAwLS4xOC0uMjIyeiIvPjwvc3ZnPg==","Zomato Gold":"data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRTIzNzQ0IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+Wm9tYXRvPC90aXRsZT48cGF0aCBkPSJNMTkuNjE1IDkuNDVsLTEuMjU4LjQ3My0uMTY3LjcxLS40NDYuMDIxLS4xMTUuOTc4aC40MDhsLS4yMTEgMS41MWMtLjEzMS45MzkuMDM2IDEuMzgxLjg2NSAxLjM4MS40ODggMCAuOTEtLjE3NSAxLjEzNS0uMjk3bC4xNDUtLjljLS4xNjcuMDgzLS40MzYuMTktLjYxOC4xOS0uMjQ3IDAtLjI3Ni0uMTMtLjIyNS0uNDg4bC4xODktMS4zOTZoLjg0M2MuMDMtLjIwNi4xMzEtLjg3Ny4xNi0xaC0uODY1em0tMy43NzkgMS4wMDJjLS4xMTUuMDAyLS4yMzYuMDEtLjM2MS4wMjZhMy41OTIgMy41OTIgMCAwIDAtMS4zNDcuNDMybC4yNi43ODljLjI2OS0uMTUuNjE1LS4yOC45NzgtLjMyNi41MzgtLjA2Ni43NTcuMS43OS4zNzUuMDE0LjEwOS4wMDQuMTk5LS4wMDUuMjg5bC0uMDE0LjA1NmEzLjQ2IDMuNDYgMCAwIDAtMS4wOTctLjAzNmMtLjUxOC4wNjMtLjk0My4yNzMtMS4yMDQuNmExLjMyNCAxLjMyNCAwIDAgMC0uMjI1IDEuMDM0Yy4xMjcuNTgzLjU1My44NCAxLjE5OS43Ni40NS0uMDU1LjgxMi0uMjcgMS4wNzYtLjYzYTIuNjY1IDIuNjY1IDAgMCAxLS4wMy4zMDQgMS43NCAxLjc0IDAgMCAxLS4wNzIuMjlsMS4yNDQuMDAxYTMuNjU3IDMuNjU3IDAgMCAxLS4wMDEtLjM2NWMuMDM2LS40NTkuMTE4LTEuMTQzLjI0Ny0yLjA1MWEyLjM5NyAyLjM5NyAwIDAgMC0uMDAyLS41OWMtLjA4LS42NDQtLjYyOC0uOTY5LTEuNDM2LS45NTh6bTYuNTM2LjA2M2MtMS4xOTQgMC0yLjEwNyAxLjA2Ny0yLjEwNyAyLjM0MiAwIC45NTkuNTUyIDEuNjkzIDEuNjI4IDEuNjkzIDEuMiAwIDIuMTA3LTEuMDY3IDIuMTA3LTIuMzUgMC0uOTUtLjUzOC0xLjY4NS0xLjYyOC0xLjY4NXptLTExLjc3Ny4wNDFjLS41MzggMC0xLjEyLjQ2NS0xLjUyIDEuMjM2LjEwMi0uNTA0LjA4LTEuMDc2LjA1MS0xLjE5OGE4Ljk2NCA4Ljk2NCAwIDAgMS0xLjI4Ny4xMjIgNi45IDYuOSAwIDAgMS0uMDczIDEuMjQzbC0uMTY3IDEuMTQ1Yy0uMDY2LjQ1LS4xMzguOTY5LS4yMTEgMS4yOTdoMS4zNTNjLjAwNy0uMTk5LjA1OC0uNTExLjA5NC0uNzg2bC4xMTYtLjc4NmMuMDk1LS41MTEuNTAyLTEuMTE0LjgxNS0xLjExNC4xODIgMCAuMTc1LjE3Ni4xMjQuNTA0bC0uMTMxLjg4NWMtLjA2Ni40NS0uMTM4Ljk2OS0uMjExIDEuMjk3aDEuMzY3Yy4wMDgtLjE5OS4wNTEtLjUxMi4wODgtLjc4NmwuMTE2LS43ODZjLjA5NC0uNTEyLjUwMi0xLjExNC44MTQtMS4xMTQuMTgyIDAgLjE3NS4xNjguMTQ2LjM5NmwtLjMyNyAyLjI5SDEzbC40MzgtMi42MDljLjA5NS0uNjQ5LjA0NC0xLjIzNi0uNjc2LTEuMjM2LS41MjMgMC0xLjA5LjQ0My0xLjQ5IDEuMTgyLjA4Ny0uNjEuMDM2LTEuMTgyLS42NzctMS4xODJ6bS00Ljg4LjAwOGMtMS4xNzcgMC0yLjA4IDEuMDUzLTIuMDggMi4zMTIgMCAuOTQ2LjU0NiAxLjY3IDEuNjA4IDEuNjcgMS4xODUgMCAyLjA4LTEuMDUyIDIuMDgtMi4zMTkgMC0uOTM4LS41MzEtMS42NjMtMS42MDctMS42NjN6bS01LjEyNi4wOTFjLS4wNS4zOS0uMTAyLjc3OC0uMTc1IDEuMTMuMzI4LS4wMDguNjE5LS4wMTYgMS40MTEtLjAxNmwtMS44MSAxLjk2LS4wMTUuNzAzYy40NDQtLjAzLjk5Ny0uMDM5IDEuNjMtLjAzOS41NjYgMCAxLjEzNC4wMDggMS40OTcuMDM5LjA2NS0uNDU4LjEzLS43NjMuMjEtMS4xMzctLjI3NS4wMTUtLjc1NS4wMjMtMS41MTIuMDIzbDEuODEtMS45NjkuMDIzLS42OTRjLS40MzcuMDIzLS44My4wMy0xLjUyLjAzLS43NDkgMC0uOTc1LS4wMDctMS41NDktLjAzem00Ljk4OC45MjdjLjI1NSAwIC40MDguMjI4LjQwOC43MDEgMCAuNjg3LS4yNzYgMS4yNTEtLjYyNiAxLjI1MS0uMjYxIDAtLjQxNC0uMjM2LS40MTQtLjcwMiAwLS42OTQuMjgzLTEuMjUuNjMyLTEuMjV6bTE2LjYyOSAwYy4yNTQgMCAuNDA3LjIyOC40MDcuNzAxIDAgLjY4Ny0uMjc2IDEuMjUxLS42MjUgMS4yNTEtLjI2MiAwLS40MTUtLjIzNi0uNDE1LS43MDIgMC0uNjk0LjI4NC0xLjI1LjYzMy0xLjI1ek0xNS41MSAxMi42NGMuMjA2LS4wMDMuNDAzLjAyNC41NS4wNThsLS4wMTMuMTE4Yy0uMDc1LjQ0LS4zOS44ODEtLjg0OC45MzgtLjMxLjAzNy0uNTc4LS4xNDgtLjYwOC0uMzlhLjUzOC41MzggMCAwIDEgLjExNC0uNDFjLjExNy0uMTU5LjMzNi0uMjY4LjU5OS0uMy4wNjktLjAwOS4xMzgtLjAxMy4yMDYtLjAxNFoiLz48L3N2Zz4=","VIVO":"data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNDE1RkZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+dml2bzwvdGl0bGU+PHBhdGggZD0iTTE5LjYwNCAxNC4xMDFjLTEuMTU5IDAtMS4yNjItLjk1LTEuMjYyLTEuMjQgMC0uMjkuMTAzLTEuMjQyIDEuMjYyLTEuMjQyaDIuMDYyYzEuMTYgMCAxLjI2My45NTEgMS4yNjMgMS4yNDIgMCAuMjktLjEwNCAxLjI0LTEuMjYzIDEuMjRtLTIuMDYyLTMuNTI3Yy0yLjE0MiAwLTIuMzMzIDEuNzUyLTIuMzMzIDIuMjg3IDAgLjUzNS4xOSAyLjI4NiAyLjMzMyAyLjI4NmgyLjA2MmMyLjE0MyAwIDIuMzM0LTEuNzUxIDIuMzM0LTIuMjg2IDAtLjUzNS0uMTktMi4yODctMi4zMzQtMi4yODdtLTUuNDc3LjEwN2MtLjI4NiAwLS4zNDUuMDUtLjQ1Ni4yMTMtLjExLjE2NC0yLjAyMiAzLjA4Mi0yLjAyMiAzLjA4Mi0uMDYuMDktLjEyNi4xMjYtLjIwNi4xMjYtLjA4IDAtLjE0NS0uMDM2LS4yMDYtLjEyNiAwIDAtMS45MTItMi45MTgtMi4wMjItMy4wODItLjExLS4xNjQtLjE3LS4yMTMtLjQ1Ni0uMjEzaC0uNjY4Yy0uMTU0IDAtLjIyNC4xMi0uMTI3LjI2N2wyLjI4MyAzLjQ2N2MuMzU0LjUyMS42MTQuNzMyIDEuMTk2LjczMnMuODQyLS4yMSAxLjE5Ni0uNzMybDIuMjg0LTMuNDY3Yy4wOTYtLjE0Ni4wMjYtLjI2Ny0uMTI4LS4yNjdtLTguODc2LjI4NGMwLS4yMDMuMDgtLjI4NC4yODMtLjI4NGguNTA1Yy4yMDMgMCAuMjgzLjA4LjI4My4yODN2My45YzAgLjIwMi0uMDguMjgzLS4yODMuMjgzaC0uNTA1Yy0uMjAzIDAtLjI4My0uMDgtLjI4My0uMjgzem0tMS43NjktLjI4NWMtLjI4NyAwLS4zNDYuMDUtLjQ1Ni4yMTMtLjExLjE2NC0yLjAyMiAzLjA4Mi0yLjAyMiAzLjA4Mi0uMDYxLjA5LS4xMjYuMTI2LS4yMDYuMTI2LS4wOCAwLS4xNDUtLjAzNi0uMjA2LS4xMjYgMCAwLTEuOTEyLTIuOTE4LTIuMDIzLTMuMDgyLS4xMS0uMTY0LS4xNjktLjIxMy0uNDU1LS4yMTNILjE3NWMtLjE3MSAwLS4yMjQuMTItLjEyNy4yNjdsMi4yODMgMy40NjdjLjM1NS41MjEuNjE1LjczMiAxLjE5Ny43MzIuNTgyIDAgLjg0Mi0uMjEgMS4xOTYtLjczMmwyLjI4My0zLjQ2N2MuMDk3LS4xNDYuMDQ0LS4yNjctLjEyNy0uMjY3bTEuMDU1LS44OTNjLS4xNjUtLjE2NC0uMTY1LS4yOTUgMC0uNDZsLjM1MS0uMzUxYy4xNjUtLjE2NS4yOTYtLjE2NS40NiAwbC4zNTIuMzUxYy4xNjUuMTY1LjE2NS4yOTYgMCAuNDZsLS4zNTIuMzUyYy0uMTY0LjE2NS0uMjk1LjE2NS0uNDYgMHoiLz48L3N2Zz4="};
+    const featuredBrands=["Uber","McDonalds","Spotify","KFC","Zomato Gold","VIVO"];
+    const $=s=>document.querySelector(s);
+    const rowsEl=$("#partnershipRows"),search=$("#search"),statusFilter=$("#statusFilter"),categoryFilter=$("#categoryFilter"),ageFilter=$("#ageFilter"),resultCount=$("#resultCount"),emptyState=$("#emptyState"),dialog=$("#brandDialog"),campusGrid=$("#campusGrid"),campusEmpty=$("#campusEmpty"),campusResultCount=$("#campusResultCount"),kpiDialog=$("#kpiDialog"),kpiDialogRows=$("#kpiDialogRows");
+    let lastTrigger=null,lastKpiTrigger=null,campusStatus='';
+    const initials=name=>(name.match(/[A-Za-z0-9]+/g)||[]).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+    const palette=[['#eaf3ff','#1758a6'],['#e3f7f3','#087f72'],['#fff2d8','#8a5200'],['#f1eafe','#62409a'],['#ffeaec','#9b2937']];
+    const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function logoMarkup(name,type='brand'){const src=type==='brand'?embeddedBrandLogos[name]:'';const fallback=`<span class="logo-fallback"${src?' hidden':''}>${esc(initials(name))}</span>`;return src?`<img data-logo src="${src}" alt="" aria-hidden="true" width="64" height="40">${fallback}`:fallback}
+    function bindLogoFallbacks(root=document){root.querySelectorAll('img[data-logo]').forEach(img=>{if(img.dataset.bound)return;img.dataset.bound='1';const fail=()=>{img.hidden=true;const fb=img.nextElementSibling;if(fb)fb.hidden=false};img.addEventListener('error',fail,{once:true});if(img.complete&&img.naturalWidth===0)fail()})}
+    function renderLogoRail(){const rail=$("#logoRail");rail.innerHTML=featuredBrands.map(name=>`<button class="logo-tile" type="button" data-featured-brand="${esc(name)}" aria-label="Open ${esc(name)} partnership details">${logoMarkup(name)}<b>${esc(name)}</b></button>`).join('')+`<button class="logo-tile more-tile" type="button" data-drilldown="commercial" aria-haspopup="dialog"><strong>+${partnerships.length-featuredBrands.length}</strong><b>more commercial partners</b></button>`;bindLogoFallbacks(rail)}
+    const ageMatch=(age,filter)=>!filter||(filter==='0-1'&&age<=1)||(filter==='2-3'&&age>=2&&age<=3)||(filter==='4+'&&age>=4);
+    function getFiltered(){const q=search.value.trim().toLowerCase();return partnerships.filter(p=>(!q||`${p.name} ${p.owner}`.toLowerCase().includes(q))&&(!statusFilter.value||p.status===statusFilter.value)&&(!categoryFilter.value||p.category===categoryFilter.value)&&ageMatch(p.ageMonths,ageFilter.value)).sort((a,b)=>(a.status==='In Progress'?0:1)-(b.status==='In Progress'?0:1)||b.ageMonths-a.ageMonths||a.name.localeCompare(b.name));}
+    function render(){const data=getFiltered();resultCount.textContent=`${data.length} of ${partnerships.length} records`;emptyState.style.display=data.length?'none':'block';rowsEl.innerHTML=data.map(p=>{const colors=palette[(partnerships.indexOf(p))%palette.length];return `<tr><td><button class="brand-btn" type="button" data-brand="${esc(p.name)}"><span class="avatar logo-avatar" style="--av:${colors[0]};--av-text:${colors[1]}">${logoMarkup(p.name)}</span><span>${esc(p.name)}</span></button></td><td><span class="status ${p.status==='Closed'?'closed':'open'}">${esc(p.status)}</span></td><td>${esc(p.category)}</td><td>${esc(p.location)}</td><td>${esc(p.owner)}</td><td>${esc(p.firstSeen)}</td><td><span class="age ${p.status==='In Progress'&&p.ageMonths>=4?'risk':''}">${p.ageMonths===0?'New':`${p.ageMonths} mo`}</span></td><td><button class="row-action" type="button" data-brand="${esc(p.name)}" aria-label="View ${esc(p.name)} details">View</button></td></tr>`}).join('');bindLogoFallbacks(rowsEl)}
+    function detail(label,value){return `<div class="detail"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`}
+    const statusClass=status=>status==='Live'?'live':status==='Closed'?'closed':'open';
+    function renderCampuses(){const data=campuses.filter(c=>!campusStatus||c.status===campusStatus);campusResultCount.textContent=`${data.length} of ${campuses.length} campuses`;campusEmpty.style.display=data.length?'none':'block';campusGrid.innerHTML=data.map(c=>`<button class="campus-card" type="button" data-campus="${esc(c.name)}"><span class="campus-logo">${logoMarkup(c.name,'campus')}</span><span><span class="campus-name">${esc(c.name)}</span><span class="status ${statusClass(c.status)}">${esc(c.status)}</span><span class="campus-meta"><span>${esc(c.location)}</span><span>•</span><span>${esc(c.owner)}</span></span></span></button>`).join('');bindLogoFallbacks(campusGrid)}
+    function openBrand(name,trigger){const p=partnerships.find(x=>x.name===name);if(!p)return;lastTrigger=trigger||document.activeElement;$("#dialogAvatar").innerHTML=logoMarkup(p.name);bindLogoFallbacks($("#dialogAvatar"));$("#dialogTitle").textContent=p.name;$("#dialogSubtitle").textContent=`Commercial alliance · ${p.category} · ${p.location}`;$("#dialogDetails").innerHTML=[detail('Current status',p.status),detail('Owner / POC',p.owner),detail('First seen',p.firstSeen),detail('Current age',p.ageMonths===0?'New this month':`${p.ageMonths} months`),detail('Operating mode',p.mode),detail('MIS note',p.detail)].join('');const aged=p.status==='In Progress'&&p.ageMonths>=4;const closed=p.status==='Closed';const call=$("#dialogCallout");call.className=`leadership-call${aged?' risk':''}`;call.innerHTML=aged?'<b>Leadership interpretation</b>This opportunity has remained open for 4+ months. Confirm the blocker, next action and decision date—or explicitly exit it from the active pipeline.':closed?'<b>Leadership interpretation</b>This record is marked closed. Add a separate activation / go-live milestone to confirm when value delivery begins.':'<b>Leadership interpretation</b>This is a relatively recent active opportunity. Keep the next action and target closure date current so it remains forecastable.';dialog.showModal();$("#dialogClose").focus();}
+    function openCampus(name,trigger){const c=campuses.find(x=>x.name===name);if(!c)return;lastTrigger=trigger||document.activeElement;$("#dialogAvatar").innerHTML=logoMarkup(c.name,'campus');bindLogoFallbacks($("#dialogAvatar"));$("#dialogTitle").textContent=c.name;$("#dialogSubtitle").textContent=`Campus partnership · ${c.location} · ${c.mode}`;$("#dialogDetails").innerHTML=[detail('Current status',c.status),detail('Owner / POC',c.owner),detail('Product',c.product),detail('Offer code',c.code),detail('Code type',c.codeType),detail('Validity',c.validity),detail('Offer',c.offer)].join('');const call=$("#dialogCallout");call.className='leadership-call';call.innerHTML=c.status==='Live'?'<b>Leadership interpretation</b>This partnership is live. The next leadership indicator should be reach and redemption performance against the event or campus audience.':c.status==='Closed'?'<b>Leadership interpretation</b>This partnership is marked closed. Confirm activation status and capture reach/redemptions after launch.':'<b>Leadership interpretation</b>This partnership is in progress. Add a dated next action, target closure date and expected campus reach.';dialog.showModal();$("#dialogClose").focus();}
+    function combinedRecords(){return [...partnerships.map(p=>({channel:'Commercial',name:p.name,status:p.status,location:p.location,owner:p.owner,detail:`${p.category} · ${p.mode} · first seen ${p.firstSeen}`,type:'brand'})),...campuses.map(c=>({channel:'Campus',name:c.name,status:c.status,location:c.location,owner:c.owner,detail:`${c.mode} · ${c.product}`,type:'campus'}))]}
+    const drilldowns={
+      all:{title:'All tracked partnerships',subtitle:'38 commercial alliances and 13 campus partnerships',test:()=>true},
+      commercial:{title:'Commercial alliances',subtitle:'All records from the September commercial portfolio',test:r=>r.channel==='Commercial'},
+      campus:{title:'Campus partnerships',subtitle:'All records from the campus partnership tracker',test:r=>r.channel==='Campus'},
+      progress:{title:'Partnerships in progress',subtitle:'30 commercial and 8 campus opportunities',test:r=>r.status==='In Progress'},
+      'closed-live':{title:'Closed and live partnerships',subtitle:'12 closed records plus 1 live campus partnership',test:r=>r.status==='Closed'||r.status==='Live'}
+    };
+    function openDrilldown(key,trigger){const config=drilldowns[key];if(!config)return;lastKpiTrigger=trigger||document.activeElement;const data=combinedRecords().filter(config.test).sort((a,b)=>a.channel.localeCompare(b.channel)||a.status.localeCompare(b.status)||a.name.localeCompare(b.name));$("#kpiDialogTitle").textContent=config.title;$("#kpiDialogSubtitle").textContent=config.subtitle;$("#kpiDialogCount").textContent=`${data.length} record${data.length===1?'':'s'}`;kpiDialogRows.innerHTML=data.map(r=>`<tr><td><span class="channel ${r.channel==='Campus'?'campus':''}">${esc(r.channel)}</span></td><td><span class="record-name"><span class="avatar logo-avatar">${logoMarkup(r.name,r.type)}</span><span>${esc(r.name)}</span></span></td><td><span class="status ${statusClass(r.status)}">${esc(r.status)}</span></td><td>${esc(r.location)}</td><td>${esc(r.owner)}</td><td>${esc(r.detail)}</td></tr>`).join('');bindLogoFallbacks(kpiDialogRows);kpiDialog.showModal();$("#kpiDialogClose").focus()}
+    function closeDialog(){dialog.close();if(lastTrigger)lastTrigger.focus();}
+    function closeKpiDialog(){kpiDialog.close();if(lastKpiTrigger)lastKpiTrigger.focus()}
+    function setCampusStatus(status){campusStatus=status;document.querySelectorAll('[data-campus-status]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.campusStatus===status)));renderCampuses()}
+    rowsEl.addEventListener('click',e=>{const btn=e.target.closest('[data-brand]');if(btn)openBrand(btn.dataset.brand,btn)});
+    campusGrid.addEventListener('click',e=>{const btn=e.target.closest('[data-campus]');if(btn)openCampus(btn.dataset.campus,btn)});
+    $("#logoRail").addEventListener('click',e=>{const brand=e.target.closest('[data-featured-brand]');if(brand)openBrand(brand.dataset.featuredBrand,brand)});
+    document.addEventListener('click',e=>{const btn=e.target.closest('[data-drilldown]');if(btn)openDrilldown(btn.dataset.drilldown,btn)});
+    document.querySelectorAll('[data-campus-status]').forEach(btn=>btn.addEventListener('click',()=>setCampusStatus(btn.dataset.campusStatus)));
+    document.querySelectorAll('[data-campus-filter]').forEach(btn=>btn.addEventListener('click',()=>{setCampusStatus(btn.dataset.campusFilter);$("#campusGrid").scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}));
+    [search,statusFilter,categoryFilter,ageFilter].forEach(el=>el.addEventListener(el===search?'input':'change',render));
+    $("#resetFilters").addEventListener('click',()=>{search.value='';statusFilter.value='';categoryFilter.value='';ageFilter.value='';render();search.focus()});
+    document.querySelectorAll('[data-filter-age]').forEach(btn=>btn.addEventListener('click',()=>{statusFilter.value='In Progress';ageFilter.value=btn.dataset.filterAge;render();document.querySelector('#explorer-title').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});ageFilter.focus()}));
+    $("#campusJump").addEventListener('click',()=>{$("#campus-title").scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});$("[data-campus-status='']").focus()});
+    $("#dialogClose").addEventListener('click',closeDialog);$("#dialogDone").addEventListener('click',closeDialog);dialog.addEventListener('click',e=>{if(e.target===dialog)closeDialog()});dialog.addEventListener('cancel',e=>{e.preventDefault();closeDialog()});
+    $("#kpiDialogClose").addEventListener('click',closeKpiDialog);$("#kpiDialogDone").addEventListener('click',closeKpiDialog);kpiDialog.addEventListener('click',e=>{if(e.target===kpiDialog)closeKpiDialog()});kpiDialog.addEventListener('cancel',e=>{e.preventDefault();closeKpiDialog()});
+    $("#printBtn").addEventListener('click',()=>window.print());
+    renderLogoRail();
+    renderCampuses();
+    render();
+  </script>
+</body>
+</html>
