@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand Alliances & Partnerships — Executive Dashboard</title>
+<style>body{font-family:Inter,system-ui,sans-serif;background:#f7f9fc;color:#08142f;margin:0}.fix{max-width:900px;margin:60px auto;padding:28px;background:#fff;border:1px solid #e4e9f1;border-radius:16px}.fix h1{margin-top:0}.fix p{color:#52627b}</style>
+</head>
+<body>
+<div class="fix"><h1>Brand Alliances & Partnerships</h1><p>Loading the latest dashboard…</p></div>
+<script>
+const SOURCE='https://raw.githubusercontent.com/nancysardana-star/ixigo-partnerships/2fdc2c59f7d8a5bf3024a82fb1cc68bb718b9804/index.html';
+fetch(SOURCE,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('source unavailable');return r.text()}).then(html=>{
+  const patch=`<script>
+  (function(){
+    function ixigoChartRecovery(){
+      try{
+        if(typeof renderCharts==='function') renderCharts();
+        if(typeof renderExtended==='function') renderExtended();
+        if(typeof renderDimension==='function') renderDimension();
+        if(typeof echarts!=='undefined' && typeof chartState!=='undefined' && chartState.instances){
+          Object.values(chartState.instances).forEach(function(c){try{c&&c.resize()}catch(e){}});
+        }
+      }catch(e){console.warn('Dashboard chart recovery:',e)}
+    }
+    if(document.readyState==='complete') setTimeout(ixigoChartRecovery,80);
+    else window.addEventListener('load',function(){setTimeout(ixigoChartRecovery,80)});
+    setTimeout(ixigoChartRecovery,1200);
+  })();
+  <\/script>`;
+  html=html.replace('</body>',patch+'</body>');
+  document.open();document.write(html);document.close();
+}).catch(()=>{document.querySelector('.fix p').textContent='The dashboard source could not be loaded. Please refresh.'});
+</script>
+</body>
+</html>
