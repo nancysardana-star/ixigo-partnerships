@@ -49,6 +49,10 @@
     .global-filter-copy p{font-size:.78rem;line-height:1.45;margin:0;color:var(--slate-600)}
     .global-filter-panel .trend-controls{justify-content:center}
     .global-filter-panel .data-note{height:100%;display:flex;flex-direction:column;justify-content:center}
+    .source-unavailable{border:1px solid #edd7a4;background:#fffaf0;border-radius:var(--radius);padding:18px;color:#684512}
+    .source-unavailable strong{display:block;color:#8a5200;margin-bottom:4px}
+    .sheet5-section.time-unavailable>:not(.source-unavailable){display:none}
+    .extended-analytics.time-unavailable>:not(.extended-head):not(.source-unavailable){display:none}
     .readout-main{background:linear-gradient(118deg,#eef5ff,#fff 68%);border:1px solid #d8e6fa;border-radius:var(--radius);padding:18px 20px;display:flex;gap:16px;align-items:flex-start}
     .readout-icon{flex:0 0 42px;height:42px;border-radius:12px;background:var(--ink-900);display:grid;place-items:center;color:#fff}
     .readout h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.095em;margin:0 0 5px;color:var(--blue-600)}
@@ -376,7 +380,7 @@
       <div class="global-filter-copy">
         <span class="section-kicker">Dashboard controls</span>
         <h2 id="global-filter-title">Outcome reporting period</h2>
-        <p>The financial year updates redemption, user, GMV, CPA and CM1 totals. The view control changes chart and breakup grouping.</p>
+        <p>The financial year updates all dated outcome and Sheet5 analyses. The view control changes monthly, quarterly and FY/YTD chart grouping.</p>
       </div>
       <div class="trend-controls">
         <label class="trend-field">Financial year
@@ -495,7 +499,8 @@
           <div class="insight-strip"><strong>Concentration signal:</strong> Reliance Digital and Vijay Sales generated 71.2% of May redemptions and 74.8% of GMV.</div>
         </article>
       </div>
-      <section class="sheet5-section" aria-labelledby="sheet5-title">
+      <section class="sheet5-section" id="sheet5Section" aria-labelledby="sheet5-title">
+        <div class="source-unavailable" id="sheet5Unavailable" hidden><strong>No Sheet5 data for the selected financial year</strong><span>Sheet5 currently covers April 2024–January 2025 only. Choose FY 2024–25 or All periods to view these financial and customer cuts.</span></div>
         <article class="chart-panel">
           <div class="chart-panel-head"><div><h3 id="sheet5-title">Sheet5 revenue economics</h3><div class="desc">Redemption-level totals, revenue bridge and commercial cuts</div></div><span class="source-tag">Apr 2024–Jan 2025</span></div>
           <div class="coverage-note"><strong>Coverage note:</strong> Sheet5 contains redemption-level data only from April 2024 through January 2025. The Brand Visibility trends above continue through May 2026, so later months are intentionally excluded from the revenue cuts below.</div>
@@ -519,14 +524,12 @@
           <div class="coverage-note" id="dimensionNote">Brand names follow the exact labels in Sheet5; similarly named variants are not merged.</div>
         </article>
       </section>
-      <section class="extended-analytics" aria-labelledby="booking-intelligence-title">
+      <section class="extended-analytics" id="extendedAnalytics" aria-labelledby="booking-intelligence-title">
         <div class="extended-head">
-          <div><h3 id="booking-intelligence-title">Booking and customer intelligence</h3><p>All ten requested Sheet5 analyses use the same period selection.</p></div>
-          <div class="sheet5-period-controls">
-            <label>View by<select id="sheet5PeriodType"><option value="all">Financial year</option><option value="quarter">Quarter</option><option value="month">Month</option></select></label>
-            <label>Period<select id="sheet5PeriodValue" aria-label="Select Sheet5 reporting period"><option value="all">FY 2024–25 available</option></select></label>
-          </div>
+          <div><h3 id="booking-intelligence-title">Booking and customer intelligence</h3><p>All ten requested Sheet5 analyses now follow the global financial-year and view controls above.</p></div>
+          <span class="source-tag" id="sheet5GlobalPeriod">Global filter · FY 2024–25</span>
         </div>
+        <div class="source-unavailable" id="extendedUnavailable" hidden><strong>No Sheet5 data for the selected financial year</strong><span>Choose FY 2024–25 or All periods in the global filter. Sheet5 has no records after January 2025.</span></div>
         <div class="analysis-kpis" aria-label="Selected Sheet5 period totals">
           <div class="sheet5-stat"><span>Bookings</span><strong id="extBookings">15,619</strong></div><div class="sheet5-stat"><span>Unique users</span><strong id="extUsers">13,500</strong></div><div class="sheet5-stat"><span>Passengers</span><strong id="extPassengers">20,286</strong></div><div class="sheet5-stat"><span>GMV</span><strong id="extGmv">₹15.76 Cr</strong></div><div class="sheet5-stat"><span>Ancillary adoption</span><strong id="extAncillaryRate">36.0%</strong></div><div class="sheet5-stat"><span>Insurance adoption</span><strong id="extInsuranceRate">5.3%</strong></div>
         </div>
@@ -824,12 +827,13 @@
     const brandVisibilityTxn={'2024-04':597,'2024-05':1069,'2024-06':581,'2024-07':622,'2024-08':3281,'2024-09':2128,'2024-10':1559,'2024-11':2059,'2024-12':2110,'2025-01':1581};
     const extendedChartIds=['bookingCohortEchart','clientEchart','paxEchart','tripEchart','markupEchart','ancillaryEchart','insuranceEchart','flexEchart','couponEchart'];
     function periodRows(period){return period.months.map(key=>sheet5Extended.periods[key]).filter(Boolean)}
-    function populateExtendedPeriods(){const select=$("#sheet5PeriodValue"),type=extendedState.type;let options=type==='quarter'?[['q1','Q1 · Apr–Jun 2024'],['q2','Q2 · Jul–Sep 2024'],['q3','Q3 · Oct–Dec 2024'],['q4','Q4 · Jan 2025 available']]:type==='month'?Object.entries(sheet5Extended.monthLabels).map(([key,label])=>[key,label]):[['all','FY 2024–25 available']];select.innerHTML=options.map(([value,label])=>`<option value="${value}">${esc(label)}</option>`).join('');extendedState.period=options.some(x=>x[0]===extendedState.period)?extendedState.period:options[0][0];select.value=extendedState.period}
+    function sheet5Available(){return chartState.fy==='all'||chartState.fy==='FY24-25'}
+    function syncSheet5ToGlobal(){const available=sheet5Available(),label=chartState.fy==='all'?'All periods · Sheet5 coverage FY 2024–25':periodLabel();extendedState.type='all';extendedState.period='all';$("#sheet5GlobalPeriod").textContent=`Global filter · ${label}`;$("#sheet5Section").classList.toggle('time-unavailable',!available);$("#extendedAnalytics").classList.toggle('time-unavailable',!available);$("#sheet5Unavailable").hidden=available;$("#extendedUnavailable").hidden=available;return available}
     function simpleChart(id,option){const chart=initChart(id);if(chart)chart.setOption(option,true)}
     function extTooltip(){return {trigger:'axis',backgroundColor:'#08142f',borderWidth:0,textStyle:{color:'#fff',fontSize:12},extraCssText:'box-shadow:0 14px 32px rgba(3,12,31,.25);border-radius:10px'}}
-    function renderExtended(){const p=sheet5Extended.periods[extendedState.period]||sheet5Extended.periods.all,k=p.k,total=k.t||1,fmt=v=>Number(v).toLocaleString('en-IN');
+    function renderExtended(){if(!syncSheet5ToGlobal())return;const p=sheet5Extended.periods.all,k=p.k,total=k.t||1,fmt=v=>Number(v).toLocaleString('en-IN');
       $("#extBookings").textContent=fmt(k.t);$("#extUsers").textContent=fmt(k.u);$("#extPassengers").textContent=fmt(k.pax);$("#extGmv").textContent=compactMoney(k.g);$("#extAncillaryRate").textContent=`${(p.ancStats.bookings/total*100).toFixed(1)}%`;$("#extInsuranceRate").textContent=`${(p.insStats.bookings/total*100).toFixed(1)}%`;
-      const monthly=periodRows(p),labels=monthly.map(x=>sheet5Extended.monthLabels[x.id]);if(typeof echarts!=='undefined'){
+      const monthly=chartState.grain==='quarter'?['q1','q2','q3','q4'].map(id=>sheet5Extended.periods[id]):chartState.grain==='year'?[p]:periodRows(p),labels=chartState.grain==='quarter'?monthly.map(x=>x.label.split(' · ')[0]):chartState.grain==='year'?['FY 2024–25 available']:monthly.map(x=>sheet5Extended.monthLabels[x.id]);if(typeof echarts!=='undefined'){
         simpleChart('bookingCohortEchart',{animation:true,tooltip:extTooltip(),legend:{top:7,right:8,textStyle:{color:'#52627b'}},grid:{left:48,right:18,top:48,bottom:38},xAxis:{type:'category',data:labels,axisTick:{show:false},axisLabel:{color:'#6f7d93'}},yAxis:{type:'value',axisLabel:{color:'#6f7d93'},splitLine:{lineStyle:{color:'#e4e9f1',type:'dashed'}}},series:[{name:'True new',type:'bar',stack:'bookings',data:monthly.map(x=>x.k.new),itemStyle:{color:'#1768d2'}},{name:'Reactivated',type:'bar',stack:'bookings',data:monthly.map(x=>x.k.react),itemStyle:{color:'#a85e00'}},{name:'Existing',type:'bar',stack:'bookings',data:monthly.map(x=>x.k.old),itemStyle:{color:'#6f7d93'},barMaxWidth:34}]});
         simpleChart('clientEchart',{animation:true,tooltip:{...extTooltip(),formatter:items=>{const row=p.clients[items[0].dataIndex];return `${esc(row.l)}<br>Bookings: <strong>${fmt(row.t)}</strong><br>GMV: <strong>${compactMoney(row.g)}</strong><br>CM1: <strong>${compactMoney(row.c)}</strong>`}},legend:{top:7,right:8,textStyle:{color:'#52627b'}},grid:{left:48,right:52,top:48,bottom:52},xAxis:{type:'category',data:p.clients.map(x=>x.l),axisLabel:{rotate:28,color:'#6f7d93'},axisTick:{show:false}},yAxis:[{type:'value',name:'Bookings',axisLabel:{color:'#6f7d93'},splitLine:{lineStyle:{color:'#e4e9f1',type:'dashed'}}},{type:'value',name:'GMV (₹L)',axisLabel:{formatter:v=>`₹${v}L`,color:'#6f7d93'},splitLine:{show:false}}],series:[{name:'Bookings',type:'bar',data:p.clients.map(x=>x.t),barMaxWidth:28,itemStyle:{color:'#1768d2',borderRadius:[5,5,1,1]}},{name:'GMV',type:'line',yAxisIndex:1,data:p.clients.map(x=>x.g/100000),symbol:'diamond',lineStyle:{color:'#087f72',width:2},itemStyle:{color:'#087f72'}}]});
         const pie=(data,colors)=>({animation:true,tooltip:{trigger:'item',formatter:x=>`${x.name}<br><strong>${fmt(x.value)} bookings · ${x.percent}%</strong>`,backgroundColor:'#08142f',borderWidth:0,textStyle:{color:'#fff'}},legend:{bottom:2,left:'center',textStyle:{color:'#52627b'}},color:colors,series:[{type:'pie',radius:['48%','72%'],center:['50%','44%'],label:{formatter:'{b}\n{d}%',color:'#34445f'},data}]});simpleChart('paxEchart',pie(p.pax.map(x=>({name:x.l,value:x.t})),['#1768d2','#087f72','#a85e00']));simpleChart('tripEchart',pie(p.trip.map(x=>({name:x.l,value:x.t})),['#1768d2','#a85e00']));
@@ -848,7 +852,8 @@
     const dimensionMeta={brand:{label:'brands',description:'Brand-level totals and counts',placeholder:'Search brand…',note:'Brand names follow the exact labels in Sheet5; similarly named variants are not merged.'},coupon:{label:'coupon groups',description:'Coupon-code performance and economics',placeholder:'Search coupon code…',note:'The 100 most-used coupon codes are shown individually; the remaining 4,842 one-use and long-tail codes are grouped as “Other”. Unique users are not shown for that grouped row to avoid double counting.'},userType:{label:'user types',description:'New, returning and reactivated-user economics',placeholder:'Search user type…',note:'User type uses the source classification in Sheet5. “New-user redemptions” uses the separate new_user flag and may therefore differ from the user-type label.'},airline:{label:'airlines',description:'Primary / onward-airline totals',placeholder:'Search airline…',note:'Airline analysis uses onward_airline as the primary carrier so round-trip redemptions are counted once; return-airline combinations are not duplicated.'}};
     const metricValue=(row,key)=>key==='take'?(row.g?row.r/row.g*100:0):row[key];
     const metricFormat=(value,key)=>key==='t'?Math.round(value).toLocaleString('en-IN'):key==='take'?`${value.toFixed(2)}%`:compactMoney(value);
-    function renderSheet5Charts(){if(typeof echarts==='undefined')return;const monthly=sheet5Data.monthly;
+    function groupedSheet5Monthly(){const raw=sheet5Data.monthly;if(chartState.grain==='month')return raw;const sum=(rows,label)=>({l:label,...['t','u','n','g','r','d','p','c'].reduce((o,key)=>(o[key]=rows.reduce((s,x)=>s+(x[key]||0),0),o),{})});if(chartState.grain==='year')return [sum(raw,'FY 2024–25 available')];return [[0,3,'FY24–25 Q1'],[3,6,'FY24–25 Q2'],[6,9,'FY24–25 Q3'],[9,10,'FY24–25 Q4 available']].map(([start,end,label])=>sum(raw.slice(start,end),label))}
+    function renderSheet5Charts(){if(!syncSheet5ToGlobal())return;renderExtended();if(typeof echarts==='undefined')return;const monthly=groupedSheet5Monthly();
       const revenue=chartBase(monthly.map(x=>({month:x.l})));revenue.grid={left:58,right:58,top:50,bottom:42};revenue.xAxis.boundaryGap=true;revenue.yAxis=[{type:'value',name:'Amount (₹ L)',nameTextStyle:{color:'#6f7d93'},axisLabel:{formatter:v=>`₹${v}L`,color:'#6f7d93'},splitLine:{lineStyle:{color:'#e4e9f1',type:'dashed'}}},{type:'value',name:'Take rate',nameTextStyle:{color:'#6f7d93'},axisLabel:{formatter:v=>`${v}%`,color:'#6f7d93'},splitLine:{show:false}}];revenue.series=[{name:'GMV',type:'bar',data:monthly.map(x=>x.g/100000),barMaxWidth:26,itemStyle:{color:'#2f7ee6',borderRadius:[5,5,1,1]}},{name:'GR',type:'bar',data:monthly.map(x=>x.r/100000),barMaxWidth:26,itemStyle:{color:'#087f72',borderRadius:[5,5,1,1]}},{name:'GR % GMV',type:'line',yAxisIndex:1,data:monthly.map(x=>x.r/x.g*100),symbol:'diamond',symbolSize:7,lineStyle:{width:2,color:'#a85e00',type:'dashed'},itemStyle:{color:'#a85e00'}}];initChart('revenueEchart')?.setOption(revenue,true);
       const rates=monthly.map(x=>x.r/x.g*100),best=rates.indexOf(Math.max(...rates)),latest=monthly.at(-1);$("#revenueInsight").innerHTML=`<strong>Take-rate signal:</strong> peaked at ${rates[best].toFixed(2)}% in ${monthly[best].l}; ${latest.l} closed at ${(latest.r/latest.g*100).toFixed(2)}% with ${compactMoney(latest.r)} GR.`;
       const labels=['Convenience','Commission','Book markup','Ancillary','GST','GR','Discount','PG charge','CM1'],signed=[5.184,.875,.560,.100,-.172,6.547,-7.050,-.581,-1.084],bases=[0,5.184,6.059,6.619,6.547,0,-.503,-1.084,-1.084],heights=[5.184,.875,.560,.100,.172,6.547,7.050,.581,1.084],colors=['#1768d2','#1768d2','#1768d2','#1768d2','#b42332','#087f72','#b42332','#b42332','#b42332'];
@@ -921,8 +926,8 @@
     document.querySelectorAll('[data-campus-status]').forEach(btn=>btn.addEventListener('click',()=>setCampusStatus(btn.dataset.campusStatus)));
     document.querySelectorAll('[data-campus-filter]').forEach(btn=>btn.addEventListener('click',()=>{setCampusStatus(btn.dataset.campusFilter);$("#campusGrid").scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}));
     document.querySelectorAll('[data-strategic-filter]').forEach(btn=>btn.addEventListener('click',()=>setStrategicFilter(btn.dataset.strategicFilter)));
-    $("#fiscalYearSelect").addEventListener('change',e=>{chartState.fy=e.target.value;if(chartState.grain==='year'&&chartState.fy!=='all'){chartState.grain='month'}renderCharts();renderLatestContext()});
-    document.querySelectorAll('[data-grain]').forEach(btn=>btn.addEventListener('click',()=>{chartState.grain=btn.dataset.grain;if(chartState.grain==='year'){chartState.fy='all';$("#fiscalYearSelect").value='all'}renderCharts();renderLatestContext()}));
+    $("#fiscalYearSelect").addEventListener('change',e=>{chartState.fy=e.target.value;renderCharts();renderLatestContext();renderExtended()});
+    document.querySelectorAll('[data-grain]').forEach(btn=>btn.addEventListener('click',()=>{chartState.grain=btn.dataset.grain;renderCharts();renderLatestContext();renderExtended()}));
     [search,statusFilter,categoryFilter,ageFilter].forEach(el=>el.addEventListener(el===search?'input':'change',render));
     $("#resetFilters").addEventListener('click',()=>{search.value='';statusFilter.value='';categoryFilter.value='';ageFilter.value='';render();search.focus()});
     document.querySelectorAll('[data-filter-age]').forEach(btn=>btn.addEventListener('click',()=>{statusFilter.value='In Progress';ageFilter.value=btn.dataset.filterAge;render();document.querySelector('#explorer-title').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});ageFilter.focus()}));
@@ -934,7 +939,6 @@
     $("#dimensionMetric").addEventListener('change',e=>{dimensionState.metric=e.target.value;dimensionState.page=1;renderDimension()});
     $("#dimensionSearch").addEventListener('input',e=>{dimensionState.query=e.target.value;dimensionState.page=1;renderDimension()});
     $("#dimensionPrev").addEventListener('click',()=>{if(dimensionState.page>1){dimensionState.page--;renderDimension()}});$("#dimensionNext").addEventListener('click',()=>{dimensionState.page++;renderDimension()});
-    $("#sheet5PeriodType").addEventListener('change',e=>{extendedState.type=e.target.value;populateExtendedPeriods();renderExtended()});$("#sheet5PeriodValue").addEventListener('change',e=>{extendedState.period=e.target.value;renderExtended()});
     $("#printBtn").addEventListener('click',()=>window.print());
     const navLinks=[...document.querySelectorAll('.section-nav a')];
     const observedSections=navLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean);
@@ -942,7 +946,6 @@
     let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>Object.values(chartState.instances).forEach(chart=>chart.resize()),120)});
     renderLogoRail();
     renderPerformance();
-    populateExtendedPeriods();
     renderCharts();
     renderLatestContext();
     renderDimension();
