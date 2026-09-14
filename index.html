@@ -43,7 +43,8 @@
     .print-btn:hover{background:#eef5ff;transform:translateY(-1px)}
     .container{max-width:var(--max);margin:auto;padding:22px 28px 48px}
     .readout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.5fr);gap:16px;margin-top:-1px;margin-bottom:18px}
-    .global-filter-panel{display:grid;grid-template-columns:minmax(240px,.75fr) minmax(430px,1.35fr) minmax(260px,.7fr);gap:16px;align-items:center;margin-top:-1px;margin-bottom:18px;padding:16px 18px;border:1px solid #d8e6fa;border-radius:var(--radius);background:linear-gradient(118deg,#eef5ff,#fff 68%);box-shadow:var(--shadow-sm)}
+    .global-filter-shell{background:#fff;border-bottom:1px solid var(--slate-200);padding:14px 28px}
+    .global-filter-panel{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:minmax(240px,.75fr) minmax(430px,1.35fr) minmax(260px,.7fr);gap:16px;align-items:center;padding:14px 16px;border:1px solid #d8e6fa;border-radius:var(--radius);background:linear-gradient(118deg,#eef5ff,#fff 68%);box-shadow:var(--shadow-sm)}
     .global-filter-copy h2{font-size:1.05rem;margin:2px 0 4px;color:var(--ink-950)}
     .global-filter-copy p{font-size:.78rem;line-height:1.45;margin:0;color:var(--slate-600)}
     .global-filter-panel .trend-controls{justify-content:center}
@@ -338,7 +339,7 @@
     @media(max-width:1250px){.sheet5-chart-grid{grid-template-columns:1fr}.sheet5-summary{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:1250px){.analysis-kpis{grid-template-columns:repeat(3,1fr)}.coupon-layout{grid-template-columns:1fr}}
     @media(max-width:900px){.analysis-grid{grid-template-columns:1fr}.extended-head{align-items:flex-start;flex-direction:column}.sheet5-period-controls{width:100%}.sheet5-period-controls label{flex:1}.sheet5-period-controls select{width:100%}}
-    @media(max-width:760px){.global-filter-panel{grid-template-columns:1fr}.global-filter-panel .data-note{grid-column:auto}.global-filter-panel .trend-controls{justify-content:flex-start}}
+    @media(max-width:760px){.global-filter-shell{padding:12px 16px}.global-filter-panel{grid-template-columns:1fr}.global-filter-panel .data-note{grid-column:auto}.global-filter-panel .trend-controls{justify-content:flex-start}}
     @media(max-width:760px){.sheet5-summary,.analysis-kpis{grid-template-columns:repeat(2,1fr)}.dimension-toolbar,.dimension-fields{align-items:stretch;flex-direction:column}.dimension-fields input,.dimension-fields select{width:100%}.split-metrics,.definition-grid{grid-template-columns:1fr}}
     @media(max-width:430px){.sheet5-summary,.analysis-kpis{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
@@ -370,19 +371,7 @@
     </div>
   </header>
 
-  <nav class="section-nav" aria-label="Dashboard sections">
-    <div class="section-nav-inner">
-      <a href="#executive" aria-current="true">Executive</a>
-      <a href="#outcomes">Outcomes</a>
-      <a href="#pipeline">Pipeline</a>
-      <a href="#campusSection">Campus</a>
-      <a href="#actions">Actions</a>
-      <a href="#data-quality">Data quality</a>
-      <a href="#records">Records</a>
-    </div>
-  </nav>
-
-  <main id="main" class="container">
+  <div class="global-filter-shell">
     <section id="executive" class="global-filter-panel" aria-labelledby="global-filter-title">
       <div class="global-filter-copy">
         <span class="section-kicker">Dashboard controls</span>
@@ -409,7 +398,21 @@
         <span>Outcomes run through May 2026. Pipeline and campus are September 2026 snapshots and do not change with this outcome filter.</span>
       </aside>
     </section>
+  </div>
 
+  <nav class="section-nav" aria-label="Dashboard sections">
+    <div class="section-nav-inner">
+      <a href="#executive" aria-current="true">Executive</a>
+      <a href="#outcomes">Outcomes</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#campusSection">Campus</a>
+      <a href="#actions">Actions</a>
+      <a href="#data-quality">Data quality</a>
+      <a href="#records">Records</a>
+    </div>
+  </nav>
+
+  <main id="main" class="container">
     <section class="kpi-grid executive-kpis" aria-label="Latest executive performance indicators">
       <button class="kpi" type="button" data-performance="monthly" aria-haspopup="dialog" style="--kpi-color:var(--blue-600)"><span class="kpi-label" id="executiveRedemptionsLabel">Redemptions · FY 2026–27 YTD</span><span class="kpi-value" id="executiveRedemptions">968</span><span class="kpi-note" id="executiveRedemptionsNote">2 dated months</span><span class="delta" id="executiveRedemptionsDelta">Compared with prior FY</span></button>
       <button class="kpi" type="button" data-performance="monthly" aria-haspopup="dialog" style="--kpi-color:var(--teal-600)"><span class="kpi-label" id="executiveNewUsersLabel">New users · FY 2026–27 YTD</span><span class="kpi-value" id="executiveNewUsers">606</span><span class="kpi-note" id="executiveNewUsersNote">62.6% of redemptions</span><span class="delta" id="executiveNewUsersDelta">Compared with prior FY</span></button>
